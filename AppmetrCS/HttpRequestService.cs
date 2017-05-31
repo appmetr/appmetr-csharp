@@ -10,7 +10,6 @@ namespace AppmetrCS
     using System.IO.Compression;
     using System.Net;
     using System.Runtime.Serialization;
-    using System.Runtime.Serialization.Json;
     using System.Text;
     using System.Web;
     using log4net;
@@ -22,9 +21,8 @@ namespace AppmetrCS
     {
         private static readonly ILog Log = LogUtils.GetLogger(typeof (HttpRequestService));
 
-		private static readonly int READ_WRITE_TIMEOUT = 10 * 60 * 1000;
-		private static readonly int WHOLE_RQUEST_TIMEOUT = 12 * 60 * 1000;
-
+        private const int ReadWriteTimeout = 10 * 60 * 1000;
+        private const int WholeRquestTimeout = 12 * 60 * 1000;
         private const string ServerMethodName = "server.trackS2S";
         private readonly IJsonSerializer _serializer;
 
@@ -61,8 +59,8 @@ namespace AppmetrCS
             request.Method = "POST";
             request.ContentType = "application/octet-stream";
             request.ContentLength = deflatedBatch.Length;
-			request.Timeout = WHOLE_RQUEST_TIMEOUT;
-			request.ReadWriteTimeout = READ_WRITE_TIMEOUT;
+            request.Timeout = WholeRquestTimeout;
+            request.ReadWriteTimeout = ReadWriteTimeout;
 
             Log.DebugFormat("Getting request (contentLength = {0}) stream for batch with id={1}", deflatedBatch.Length, batch.GetBatchId());
             using (var stream = request.GetRequestStream())
@@ -79,8 +77,8 @@ namespace AppmetrCS
                 {
                     Log.DebugFormat("Response received for batch with id={0}", batch.GetBatchId());
 
-                    var serializer = new DataContractJsonSerializer(typeof (JsonResponseWrapper));
-                    var jsonResponse = (JsonResponseWrapper) serializer.ReadObject(response.GetResponseStream());
+                    var streamReader = new StreamReader(response.GetResponseStream());
+                    var jsonResponse = _serializer.Deserialize<JsonResponseWrapper>(streamReader.ReadToEnd());
 
                     if (jsonResponse.Error != null)
                     {
@@ -103,10 +101,10 @@ namespace AppmetrCS
 
         private static String MakeQueryString(Dictionary<String, String> @params)
         {
-            StringBuilder queryBuilder = new StringBuilder();
+            var queryBuilder = new StringBuilder();
 
-            int paramCount = 0;
-            foreach (KeyValuePair<string, string> param in @params)
+            var paramCount = 0;
+            foreach (var param in @params)
             {
                 if (param.Value != null)
                 {
