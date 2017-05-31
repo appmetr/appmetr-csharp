@@ -2,7 +2,6 @@
 
 */obj/*
 */bin/*
-.vs/*
 
 *.suo
 
@@ -11,5 +10,5 @@
 
 deploy.sh
 
+.vs
 packages
-
