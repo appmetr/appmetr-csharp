@@ -1,11 +1,11 @@
 using System;
 using System.IO;
 using System.Text;
-using AppmetrS2S.Persister;
-using AppmetrS2S.Serializations;
+using AppmetrCS.Persister;
+using AppmetrCS.Serializations;
 using log4net;
 
-namespace AppmetrS2S
+namespace AppmetrCS
 {
     internal class Utils
     {

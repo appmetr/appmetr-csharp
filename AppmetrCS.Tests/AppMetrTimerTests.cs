@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Xunit;
 
-namespace AppmetrS2S.Tests
+namespace AppmetrCS.Tests
 {
     public class AppMetrTimerTests
     {

@@ -1,6 +1,6 @@
-﻿using AppmetrS2S.Serializations;
+﻿using AppmetrCS.Serializations;
 
-namespace AppmetrS2S.Persister
+namespace AppmetrCS.Persister
 {
     #region using directives
 

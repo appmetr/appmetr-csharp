@@ -1,4 +1,4 @@
-﻿namespace AppmetrS2S.Serializations
+﻿namespace AppmetrCS.Serializations
 {
     public interface IJsonSerializer
     {

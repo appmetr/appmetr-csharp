@@ -1,4 +1,4 @@
-﻿namespace AppmetrS2S.Persister
+﻿namespace AppmetrCS.Persister
 {
     #region using directives
 

@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using AppmetrS2S.Actions;
-using AppmetrS2S.Persister;
-using AppmetrS2S.Serializations;
+using AppmetrCS.Actions;
+using AppmetrCS.Persister;
+using AppmetrCS.Serializations;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace AppmetrS2S.Tests
+namespace AppmetrCS.Tests
 {
     public class AppMetrJsonSerializationTests
     {

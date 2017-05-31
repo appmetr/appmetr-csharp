@@ -1,4 +1,4 @@
-﻿namespace AppmetrS2S.Actions
+﻿namespace AppmetrCS.Actions
 {
     #region using directives
 

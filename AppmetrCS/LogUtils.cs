@@ -1,7 +1,7 @@
 ﻿using System;
 using log4net;
 
-namespace AppmetrS2S
+namespace AppmetrCS
 {
     public static class LogUtils
     {

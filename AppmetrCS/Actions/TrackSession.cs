@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AppmetrS2S.Actions
+namespace AppmetrCS.Actions
 {
     [DataContract]
     public class TrackSession : AppMetrAction

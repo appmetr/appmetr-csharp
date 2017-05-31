@@ -1,7 +1,7 @@
 ﻿using System.IO;
-using AppmetrS2S.Serializations;
+using AppmetrCS.Serializations;
 
-namespace AppmetrS2S
+namespace AppmetrCS
 {
     #region using directives
 

@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Web.Script.Serialization;
-using AppmetrS2S.Actions;
-using AppmetrS2S.Persister;
+using AppmetrCS.Actions;
+using AppmetrCS.Persister;
 
-namespace AppmetrS2S.Serializations
+namespace AppmetrCS.Serializations
 {
     public class JavaScriptJsonSerializer : IJsonSerializer
     {

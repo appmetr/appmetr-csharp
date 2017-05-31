@@ -1,4 +1,4 @@
-﻿namespace AppmetrS2S
+﻿namespace AppmetrCS
 {
     #region using directives
 
