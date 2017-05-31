@@ -120,7 +120,7 @@ namespace AppmetrCS.Persister
             try
             {
                 using (var fileStream = new FileStream(batchFilePath, FileMode.CreateNew))
-                using (var deflateStream = new DeflateStream(fileStream, CompressionLevel.Optimal))
+                using (var deflateStream = new DeflateStream(fileStream, CompressionMode.Compress))
                 {
                     if (Log.IsDebugEnabled)
                     {

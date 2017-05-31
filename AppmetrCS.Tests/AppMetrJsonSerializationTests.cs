@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using AppmetrCS.Actions;
 using AppmetrCS.Persister;
 using AppmetrCS.Serializations;
@@ -19,38 +20,39 @@ namespace AppmetrCS.Tests
         }
 
         [Fact]
-        public void SerializersShouldReturnsEqualsValues()
+        public void SerializersShouldBeCovariant()
         {
             var batch = CreateBatch(50000);
-
             var defaultSerializer = new JavaScriptJsonSerializer();
-            var cacheSerializer = new JavaScriptJsonSerializerWithCache();
-
             var defaultJson = defaultSerializer.Serialize(batch);
-            var newtonsoftJson = cacheSerializer.Serialize(batch);
+            var deserializedJson = defaultSerializer.Deserialize<Batch>(defaultJson);
 
-            Assert.Equal(defaultJson, newtonsoftJson);
+            Assert.Equal(batch.GetBatchId(), deserializedJson.GetBatchId());
+            Assert.Equal(batch.GetServerId(), deserializedJson.GetServerId());
+            Assert.Equal(batch.GetBatch().Count, deserializedJson.GetBatch().Count);
+            
+            for (var i = 0; i < batch.GetBatch().Count; i++)
+            {
+                var expected = batch.GetBatch()[i];
+                var actual = deserializedJson.GetBatch()[i];
+
+                Assert.Equal(expected.GetAction(), actual.GetAction());
+                Assert.Equal(expected.GetUserId(), actual.GetUserId());
+                Assert.Equal(expected.GetTimestamp(), actual.GetTimestamp());
+                Assert.True(expected.GetProperties().Count == actual.GetProperties().Count && !expected.GetProperties().Except(actual.GetProperties()).Any());
+            }
         }
 
         [Fact]
         public void SerializersBench()
         {
-            var batch = CreateBatch(10000);
+            var batch = CreateBatch(1);
 
             var defaultSerializer = new JavaScriptJsonSerializer();
-            var cacheSerializer = new JavaScriptJsonSerializerWithCache();
 
             defaultSerializer.Serialize(batch);
-            cacheSerializer.Serialize(batch);
 
-            const int iterationsCount = 100;
-
-            var cacheTime = Stopwatch.StartNew();
-            for (var i = 0; i < iterationsCount; i++)
-            {
-                cacheSerializer.Serialize(batch);
-            }
-            cacheTime.Stop();
+            const Int32 iterationsCount = 100;
 
             var defaultTime = Stopwatch.StartNew();
             for (var i = 0; i < iterationsCount; i++)
@@ -60,27 +62,25 @@ namespace AppmetrCS.Tests
             defaultTime.Stop();
 
             _output.WriteLine("Default: " + defaultTime.Elapsed);
-            _output.WriteLine("Newtonsoft: " + cacheTime.Elapsed);
         }
 
-        private static Batch CreateBatch(int size)
+        private static Batch CreateBatch(Int32 size)
         {
             var events = new List<Event>();
             for (var i = 0; i < size; i++)
             {
                 var e = new Event("Event #" + i);
-                e.SetProperties(new Dictionary<string, object>
+                e.SetProperties(new Dictionary<String, Object>
                 {
                     {"index", i},
-                    {"string", "string"},
+                    {"string", "aaa"},
                     {"int", 1000},
-                    {"float", 9.99f},
-                    {"double", 8.88d},
-                    {"long", long.MaxValue},
+                    {"long", Int64.MaxValue},
                 });
                 events.Add(e);
             }
 
+            Double a;
             var batch = new Batch(Guid.NewGuid().ToString(), 1, events);
             return batch;
         }

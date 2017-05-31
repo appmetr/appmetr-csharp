@@ -48,7 +48,7 @@ namespace AppmetrCS
             var serializedBatch = Utils.SerializeBatch(batch, _serializer);
             using (var memoryStream = new MemoryStream())
             {
-                using (var deflateStream = new DeflateStream(memoryStream, CompressionLevel.Optimal))
+                using (var deflateStream = new DeflateStream(memoryStream, CompressionMode.Compress))
                 {
                     Utils.WriteData(deflateStream, serializedBatch);
                 }

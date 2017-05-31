@@ -60,15 +60,14 @@
 
         public void Trigger()
         {
-            bool isTaken = false;
-            Monitor.Enter(_lock, ref isTaken);
+            Monitor.Enter(_lock);
             try
             {
                 Monitor.Pulse(_lock);
             }
             finally
             {
-                if (isTaken) Monitor.Exit(_lock);
+                Monitor.Exit(_lock);
             }
             
         }

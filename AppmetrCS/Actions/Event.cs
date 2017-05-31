@@ -10,7 +10,7 @@
     [DataContract]
     public class Event : AppMetrAction
     {
-        private const String ACTION = "trackEvent";
+        private const String Action = "trackEvent";
 
         [DataMember(Name = "event")]
         private String _event;
@@ -19,7 +19,7 @@
         {
         }
 
-        public Event(string eventName) : base(ACTION)
+        public Event(String eventName) : base(Action)
         {
             _event = eventName;
         }
@@ -29,9 +29,14 @@
             return _event;
         }
 
-        public override int CalcApproximateSize()
+        public override Int32 CalcApproximateSize()
         {
             return base.CalcApproximateSize() + GetStringLength(_event);
+        }
+          
+        public override String ToString()
+        {
+            return $"{base.ToString()},event={GetEvent()}";
         }
     }
 }
