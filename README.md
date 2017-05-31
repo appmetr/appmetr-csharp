@@ -1,2 +1,2 @@
-# appmetr-s2s-csharp
-Server-to-server appmetr event analytics realization
+# appmetr-csharp
+Client-to-server appmetr event analytics realization implemented on csharp
