@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("AppmetrS2S")]
+[assembly: AssemblyTitle("AppmetrCS.Tests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("AppmetrS2S")]
+[assembly: AssemblyProduct("AppmetrCS.Tests")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("594a7c70-c6e3-427b-8eb0-4d09a66e347a")]
+[assembly: Guid("e8838d8a-df36-4573-b2f2-18342de7daea")]
 
 // Version information for an assembly consists of the following four values:
 //

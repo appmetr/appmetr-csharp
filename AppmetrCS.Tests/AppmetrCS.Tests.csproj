@@ -9,8 +9,8 @@
     <ProjectGuid>{1FABEBCD-3E7E-4AF9-B752-D55ED4CDDB44}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AppmetrS2S.Tests</RootNamespace>
-    <AssemblyName>AppmetrS2S.Tests</AssemblyName>
+    <RootNamespace>AppmetrCS.Tests</RootNamespace>
+    <AssemblyName>AppmetrCS.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -70,9 +70,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AppmetrS2S\AppmetrS2S.csproj">
+    <ProjectReference Include="..\AppmetrCS\AppmetrCS.csproj">
       <Project>{4db6fbe6-3852-4f8c-8327-8c5a835aad5d}</Project>
-      <Name>AppmetrS2S</Name>
+      <Name>AppmetrCS</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppmetrS2S", "AppmetrS2S\AppmetrS2S.csproj", "{4DB6FBE6-3852-4F8C-8327-8C5A835AAD5D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppmetrCS", "AppmetrCS\AppmetrCS.csproj", "{4DB6FBE6-3852-4F8C-8327-8C5A835AAD5D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{5A0D9EF6-5D7A-4886-9667-CF495ECE3E36}"
 	ProjectSection(SolutionItems) = preProject
@@ -12,7 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{5A0D9E
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppmetrS2S.Tests", "AppmetrS2S.Tests\AppmetrS2S.Tests.csproj", "{1FABEBCD-3E7E-4AF9-B752-D55ED4CDDB44}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppmetrCS.Tests", "AppmetrCS.Tests\AppmetrCS.Tests.csproj", "{1FABEBCD-3E7E-4AF9-B752-D55ED4CDDB44}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
