@@ -25,16 +25,12 @@ namespace AppmetrCS.Persister
         [DataMember(Name = "batch")]
         public readonly List<AppMetrAction> Actions;
 
-        [DataMember(Name = "serverId")]
-        public readonly String ServerId;
-
         private Batch()
         {
         }
 
-        public Batch(String serverId, Int32 batchId, IEnumerable<AppMetrAction> actionList)
+        public Batch(Int32 batchId, IEnumerable<AppMetrAction> actionList)
         {
-            ServerId = serverId;
             BatchId = batchId;
             Actions = new List<AppMetrAction>();
 
@@ -46,7 +42,7 @@ namespace AppmetrCS.Persister
 
         public override String ToString()
         {
-            return $"Batch{{batchId={BatchId}, serverId={ServerId}, events={String.Join(",", Actions.Select(v => v.ToString()).ToArray())}}}";
+            return $"Batch{{batchId={BatchId}, events={String.Join(",", Actions.Select(v => v.ToString()).ToArray())}}}";
         }
     }
 }

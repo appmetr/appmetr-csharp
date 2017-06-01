@@ -21,11 +21,5 @@
         /// Remove oldest batch from storage.
         /// </summary>
         void Remove();
-
-        /// <summary>
-        /// Setup server Id for batch identification
-        /// </summary>
-        /// <value>server id to identify batches</value>
-        String ServerId { set; }
     }
 }

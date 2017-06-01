@@ -12,7 +12,6 @@
     {
         private readonly Queue<Batch> _batchQueue = new Queue<Batch>();
         private Int32 _batchId;
-        private String _serverId;
 
         public Batch GetNext()
         {
@@ -26,7 +25,7 @@
         {
             lock (_batchQueue)
             {
-                _batchQueue.Enqueue(new Batch(_serverId, _batchId++, actionList));
+                _batchQueue.Enqueue(new Batch(_batchId++, actionList));
             }
         }
 
@@ -36,11 +35,6 @@
             {
                 _batchQueue.Dequeue();
             }
-        }
-
-        public String ServerId
-        {
-            set => _serverId = value;
         }
     }
 }

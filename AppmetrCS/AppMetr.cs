@@ -49,7 +49,6 @@ namespace AppmetrCS
             _token = token;
             _url = url;
             _batchPersister = batchPersister ?? new MemoryBatchPersister();
-            _batchPersister.ServerId = Guid.NewGuid().ToString();
             _httpRequestService = new HttpRequestService(serializer ?? JavaScriptJsonSerializerWithCache.Instance);
             _flushTimer = new AppMetrTimer(FlushPeriod, Flush, "FlushJob");
             _uploadTimer = new AppMetrTimer(UploadPeriod, Upload, "UploadJob");

@@ -29,7 +29,6 @@ namespace AppmetrCS.Persister
 
         private Queue<Int32> _fileIds;
         private Int32 _lastBatchId;
-        private String _serverId;
 
         public FileBatchPersister(String filePath) : this(filePath, JavaScriptJsonSerializerWithCache.Instance)
         {
@@ -126,7 +125,7 @@ namespace AppmetrCS.Persister
                     {
                         Log.DebugFormat("Persist batch {0}", _lastBatchId);
                     }
-                    Utils.WriteBatch(deflateStream, new Batch(_serverId, _lastBatchId, actions), _serializer);
+                    Utils.WriteBatch(deflateStream, new Batch(_lastBatchId, actions), _serializer);
                     _fileIds.Enqueue(_lastBatchId);
 
                     UpdateLastBatchId();
@@ -221,11 +220,6 @@ namespace AppmetrCS.Persister
         private String GetBatchFileName(Int32 batchId)
         {
             return $"{BatchFilePrefix}{batchId:D11}";
-        }
-
-        public String ServerId
-        {
-            set => _serverId = value;
         }
     }
 }

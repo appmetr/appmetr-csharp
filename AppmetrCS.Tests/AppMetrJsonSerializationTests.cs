@@ -45,7 +45,6 @@ namespace AppmetrCS.Tests
             _output.WriteLine(deserializedBatch.ToString());
 
             Assert.Equal(batch.BatchId, deserializedBatch.BatchId);
-            Assert.Equal(batch.ServerId, deserializedBatch.ServerId);
             Assert.Equal(batch.Actions.Count, deserializedBatch.Actions.Count);
             
             
@@ -158,7 +157,7 @@ namespace AppmetrCS.Tests
             actions.Add(trackSession);
             actions.Add(trackPayment);
 
-            var batch = new Batch(Guid.NewGuid().ToString(), 1, actions);
+            var batch = new Batch(1, actions);
             return batch;
         }
     }
