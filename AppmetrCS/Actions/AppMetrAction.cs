@@ -34,48 +34,28 @@ namespace AppmetrCS.Actions
             _action = action;
         }
 
-        public String GetAction()
+        public String Action
         {
-            return _action;
+            get => _action;
+            set => _action = value;
         }
 
-        public AppMetrAction SetAction(String action)
+        public Int64 Timestamp
         {
-            _action = action;
-            return this;
+            get => _timestamp;
+            set => _timestamp = value;
         }
 
-        public Int64 GetTimestamp()
+        public IDictionary<String, Object> Properties
         {
-            return _timestamp;
+            get => _properties;
+            set => _properties = value;
         }
 
-        public AppMetrAction SetTimestamp(Int64 timestamp)
+        public String UserId
         {
-            _timestamp = timestamp;
-            return this;
-        }
-
-        public IDictionary<String, Object> GetProperties()
-        {
-            return _properties;
-        }
-
-        public AppMetrAction SetProperties(IDictionary<String, Object> properties)
-        {
-            _properties = properties;
-            return this;
-        }
-
-        public String GetUserId()
-        {
-            return _userId;
-        }
-
-        public AppMetrAction SetUserId(String userId)
-        {
-            _userId = userId;
-            return this;
+            get => _userId;
+            set => _userId = value;
         }
 
         //http://codeblog.jonskeet.uk/2011/04/05/of-memory-and-strings/
@@ -102,8 +82,8 @@ namespace AppmetrCS.Actions
         
         public override String ToString()
         {
-            return $"{GetType().Name}{{action={GetAction()}, timestamp={GetTimestamp()}, userId={GetUserId()}, " +
-                   $"properties{"{" + String.Join(",", GetProperties().Select(kv => kv.Key + "=" + kv.Value).ToArray()) + "}"}}}";
+            return $"{GetType().Name}{{action={Action}, timestamp={Timestamp}, userId={UserId}, " +
+                   $"properties{"{" + String.Join(",", Properties.Select(kv => kv.Key + "=" + kv.Value).ToArray()) + "}"}}}";
         }
     }
 }

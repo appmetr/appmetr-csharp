@@ -52,10 +52,10 @@ namespace AppmetrCS.Tests
                 var expected = batch.Actions[i];
                 var actual = deserializedBatch.Actions[i];
 
-                Assert.Equal(expected.GetAction(), actual.GetAction());
-                Assert.Equal(expected.GetUserId(), actual.GetUserId());
-                Assert.Equal(expected.GetTimestamp(), actual.GetTimestamp());
-                Assert.True(expected.GetProperties().Count == actual.GetProperties().Count && !expected.GetProperties().Except(actual.GetProperties()).Any());
+                Assert.Equal(expected.Action, actual.Action);
+                Assert.Equal(expected.UserId, actual.UserId);
+                Assert.Equal(expected.Timestamp, actual.Timestamp);
+                Assert.True(expected.Properties.Count == actual.Properties.Count && !expected.Properties.Except(actual.Properties).Any());
             }
         }
 
@@ -105,18 +105,19 @@ namespace AppmetrCS.Tests
             var events = new List<Event>();
             for (var i = 0; i < size; i++)
             {
-                var e = new Event("Event #" + i);
-                e.SetProperties(new Dictionary<String, Object>
+                var evt = new Event("Event #" + i)
                 {
-                    {"index", i},
-                    {"string", "aaa"},
-                    {"int", 1000},
-                    {"long", Int64.MaxValue},
-                });
-                events.Add(e);
+                    Properties = new Dictionary<String, Object>
+                    {
+                        {"index", i},
+                        {"string", "aaa"},
+                        {"int", 1000},
+                        {"long", Int64.MaxValue},
+                    }
+                };
+                events.Add(evt);
             }
 
-            Double a;
             var batch = new Batch(Guid.NewGuid().ToString(), 1, events);
             return batch;
         }
