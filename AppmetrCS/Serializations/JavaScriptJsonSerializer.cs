@@ -50,7 +50,7 @@ namespace AppmetrCS.Serializations
             {
                 if (ReferenceEquals(obj, null)) return null;
 
-                Type objType = obj.GetType();
+                var objType = obj.GetType();
                 if (Attribute.GetCustomAttribute(objType, typeof(DataContractAttribute)) == null) return null;
 
                 var result = new Dictionary<String, Object> { { TypeFieldName, objType.AssemblyQualifiedName } };

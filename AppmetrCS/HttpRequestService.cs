@@ -21,12 +21,12 @@ namespace AppmetrCS
     {
         private static readonly ILog Log = LogUtils.GetLogger(typeof (HttpRequestService));
 
-        private const int ReadWriteTimeout = 10 * 60 * 1000;
-        private const int WholeRquestTimeout = 12 * 60 * 1000;
-        private const string ServerMethodName = "server.trackS2S";
+        private const Int32 ReadWriteTimeout = 10 * 60 * 1000;
+        private const Int32 WholeRquestTimeout = 12 * 60 * 1000;
+        private const String ServerMethodName = "server.trackS2S";
         private readonly IJsonSerializer _serializer;
 
-        public HttpRequestService() : this(new JavaScriptJsonSerializer())
+        public HttpRequestService() : this(new NewtonsoftSerializer())
         {
         }
 
@@ -35,16 +35,16 @@ namespace AppmetrCS
             _serializer = serializer;
         }
 
-        public bool SendRequest(string httpUrl, string token, Batch batch)
+        public Boolean SendRequest(String httpUrl, String token, Batch batch)
         {
-            var @params = new Dictionary<string, string>(3)
+            var @params = new Dictionary<String, String>(3)
             {
                 {"method", ServerMethodName},
                 {"token", token},
                 {"timestamp", Convert.ToString(Utils.GetNowUnixTimestamp())}
             };
 
-            byte[] deflatedBatch;
+            Byte[] deflatedBatch;
             var serializedBatch = Utils.SerializeBatch(batch, _serializer);
             using (var memoryStream = new MemoryStream())
             {
@@ -128,17 +128,32 @@ namespace AppmetrCS
     {
         [DataMember(Name = "error")] public ErrorWrapper Error;
         [DataMember(Name = "response")] public ResponseWrapper Response;
+
+        public override String ToString()
+        {
+            return $"{nameof(Error)}: {Error}, {nameof(Response)}: {Response}";
+        }
     }
 
     [DataContract]
     internal class ErrorWrapper
     {
         [DataMember(Name = "message", IsRequired = true)] public String Message;
+
+        public override String ToString()
+        {
+            return $"{nameof(Message)}: {Message}";
+        }
     }
 
     [DataContract]
     internal class ResponseWrapper
     {
         [DataMember(Name = "status", IsRequired = true)] public String Status;
+
+        public override String ToString()
+        {
+            return $"{nameof(Status)}: {Status}";
+        }
     }
 }
