@@ -146,6 +146,7 @@ namespace AppmetrCS.Tests
             actions.Add(trackEvent);
             actions.Add(attachProperties);
             actions.Add(trackLevel);
+            actions.Add(trackSession);
 
             var batch = new Batch(Guid.NewGuid().ToString(), 1, actions);
             return batch;
