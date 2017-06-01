@@ -49,7 +49,7 @@ namespace AppmetrCS
             _token = token;
             _url = url;
             _batchPersister = batchPersister ?? new MemoryBatchPersister();
-            _httpRequestService = new HttpRequestService(serializer ?? new JavaScriptJsonSerializer());
+            _httpRequestService = new HttpRequestService(serializer ?? JavaScriptJsonSerializerWithCache.Instance);
 
             _batchPersister.SetServerId(Guid.NewGuid().ToString());
 
@@ -149,19 +149,19 @@ namespace AppmetrCS
                 {
                     allBatchCounter++;
 
-                    _log.DebugFormat("Starting send batch with id={0}", batch.GetBatchId());
+                    _log.DebugFormat("Starting send batch with id={0}", batch.BatchId);
                     if (_httpRequestService.SendRequest(_url, _token, batch))
                     {
-                        _log.DebugFormat("Successfuly send batch with id={0}", batch.GetBatchId());
+                        _log.DebugFormat("Successfuly send batch with id={0}", batch.BatchId);
 
                         _batchPersister.Remove();
                         uploadedBatchCounter++;
 
-                        _log.DebugFormat("Batch {0} successfully uploaded", batch.GetBatchId());
+                        _log.DebugFormat("Batch {0} successfully uploaded", batch.BatchId);
                     }
                     else
                     {
-                        _log.ErrorFormat("Error while upload batch {0}", batch.GetBatchId());
+                        _log.ErrorFormat("Error while upload batch {0}", batch.BatchId);
                         break;
                     }
                 }

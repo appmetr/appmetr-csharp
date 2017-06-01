@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using AppmetrCS.Serializations;
+using Newtonsoft.Json;
 
 namespace AppmetrCS
 {
@@ -26,7 +27,7 @@ namespace AppmetrCS
         private const String ServerMethodName = "server.trackS2S";
         private readonly IJsonSerializer _serializer;
 
-        public HttpRequestService() : this(new NewtonsoftSerializer())
+        public HttpRequestService() : this(JavaScriptJsonSerializerWithCache.Instance)
         {
         }
 
@@ -62,23 +63,23 @@ namespace AppmetrCS
             request.Timeout = WholeRquestTimeout;
             request.ReadWriteTimeout = ReadWriteTimeout;
 
-            Log.DebugFormat("Getting request (contentLength = {0}) stream for batch with id={1}", deflatedBatch.Length, batch.GetBatchId());
+            Log.DebugFormat("Getting request (contentLength = {0}) stream for batch with id={1}", deflatedBatch.Length, batch.BatchId);
             using (var stream = request.GetRequestStream())
             {
-                Log.DebugFormat("Request stream created for batch with id={0}", batch.GetBatchId());
-                Log.DebugFormat("Write bytes to stream. Batch id={0}", batch.GetBatchId());
+                Log.DebugFormat("Request stream created for batch with id={0}", batch.BatchId);
+                Log.DebugFormat("Write bytes to stream. Batch id={0}", batch.BatchId);
                 Utils.WriteData(stream, deflatedBatch);
             }
 
             try
             {
-                Log.DebugFormat("Getting response after sending batch with id={0}", batch.GetBatchId());
+                Log.DebugFormat("Getting response after sending batch with id={0}", batch.BatchId);
                 using (var response = (HttpWebResponse) request.GetResponse())
                 {
-                    Log.DebugFormat("Response received for batch with id={0}", batch.GetBatchId());
+                    Log.DebugFormat("Response received for batch with id={0}", batch.BatchId);
 
                     var streamReader = new StreamReader(response.GetResponseStream());
-                    var jsonResponse = _serializer.Deserialize<JsonResponseWrapper>(streamReader.ReadToEnd());
+                    var jsonResponse = JsonConvert.DeserializeObject<JsonResponseWrapper>(streamReader.ReadToEnd());
 
                     if (jsonResponse.Error != null)
                     {

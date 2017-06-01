@@ -70,7 +70,7 @@ namespace AppmetrCS.Serializations
                 return result;
             }
 
-            public override IEnumerable<Type> SupportedTypes => new[] { typeof(Batch), typeof(AppMetrAction), typeof(JsonResponseWrapper) };
+            public override IEnumerable<Type> SupportedTypes => new[] { typeof(Batch), typeof(AppMetrAction) };
 
             private static Object ConvertDictionaryToObject(IDictionary<String, Object> dictionary, Type type)
             {

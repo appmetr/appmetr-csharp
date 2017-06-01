@@ -69,6 +69,7 @@
     <Compile Include="Persister\MemoryBatchPersister.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Serializations\JavaScriptJsonSerializer.cs" />
+    <Compile Include="Serializations\JavaScriptJsonSerializerWithCache.cs" />
     <Compile Include="Serializations\NewtonsoftSerializer.cs" />
     <Compile Include="Utils.cs" />
   </ItemGroup>

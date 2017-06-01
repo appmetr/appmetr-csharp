@@ -21,22 +21,36 @@ namespace AppmetrCS.Tests
         }
 
         [Fact]
-        public void BatchSerializationDeserialization()
+        public void BatchJavaScriptJsonSerializer()
         {
+            var batch = CreateBatch(3);
             var serializer = new JavaScriptJsonSerializer();
-            
-            var batch = CreateBatch(10);
+            BatchSerializationDeserialization(batch, serializer);
+        }
+        
+        [Fact]
+        public void BatchJavaScriptJsonSerializerWithCache()
+        {
+            var batch = CreateBatch(3);
+            var serializer = new JavaScriptJsonSerializerWithCache();
+            BatchSerializationDeserialization(batch, serializer);
+        }
+        
+        protected void BatchSerializationDeserialization(Batch batch, IJsonSerializer serializer)
+        {
             var json = serializer.Serialize(batch);
             var deserializedBatch = serializer.Deserialize<Batch>(json);
 
-            Assert.Equal(batch.GetBatchId(), deserializedBatch.GetBatchId());
-            Assert.Equal(batch.GetServerId(), deserializedBatch.GetServerId());
-            Assert.Equal(batch.GetBatch().Count, deserializedBatch.GetBatch().Count);
+            Assert.Equal(batch.BatchId, deserializedBatch.BatchId);
+            Assert.Equal(batch.ServerId, deserializedBatch.ServerId);
+            Assert.Equal(batch.Actions.Count, deserializedBatch.Actions.Count);
             
-            for (var i = 0; i < batch.GetBatch().Count; i++)
+            _output.WriteLine(json);
+            
+            for (var i = 0; i < batch.Actions.Count; i++)
             {
-                var expected = batch.GetBatch()[i];
-                var actual = deserializedBatch.GetBatch()[i];
+                var expected = batch.Actions[i];
+                var actual = deserializedBatch.Actions[i];
 
                 Assert.Equal(expected.GetAction(), actual.GetAction());
                 Assert.Equal(expected.GetUserId(), actual.GetUserId());

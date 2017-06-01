@@ -1,4 +1,6 @@
-﻿namespace AppmetrCS.Persister
+﻿using System.Linq;
+
+namespace AppmetrCS.Persister
 {
     #region using directives
 
@@ -18,44 +20,28 @@
     public class Batch
     {
         [DataMember(Name = "batchId")]
-        private readonly Int32 _batchId;
+        public readonly Int32 BatchId;
 
         [DataMember(Name = "batch")]
-        private readonly List<AppMetrAction> _batch;
+        public readonly List<AppMetrAction> Actions;
 
         [DataMember(Name = "serverId")]
-        private readonly String _serverId;
+        public readonly String ServerId;
 
         private Batch()
         {
-            
         }
 
         public Batch(String serverId, Int32 batchId, IEnumerable<AppMetrAction> actionList)
         {
-            _serverId = serverId;
-            _batchId = batchId;
-            _batch = new List<AppMetrAction>(actionList);
-        }
-
-        public Int32 GetBatchId()
-        {
-            return _batchId;
-        }
-
-        public List<AppMetrAction> GetBatch()
-        {
-            return _batch;
-        }
-
-        public String GetServerId()
-        {
-            return _serverId;
+            ServerId = serverId;
+            BatchId = batchId;
+            Actions = new List<AppMetrAction>(actionList);
         }
 
         public override String ToString()
         {
-            return $"Batch{{events={_batch.Count}, batchId={_batchId}, serverId={_serverId}}}";
+            return $"Batch{{batchId={BatchId}, serverId={ServerId}, events={String.Join(",", Actions.Select(v => v.ToString()).ToArray())}}}";
         }
     }
 }

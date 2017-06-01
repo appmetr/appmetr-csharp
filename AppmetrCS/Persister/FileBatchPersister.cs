@@ -21,21 +21,21 @@ namespace AppmetrCS.Persister
 
         private readonly ReaderWriterLock _lock = new ReaderWriterLock();
 
-        private const string BatchFilePrefix = "batchFile#";
+        private const String BatchFilePrefix = "batchFile#";
 
-        private readonly string _filePath;
-        private readonly string _batchIdFile;
+        private readonly String _filePath;
+        private readonly String _batchIdFile;
         private readonly IJsonSerializer _serializer;
 
-        private Queue<int> _fileIds;
-        private int _lastBatchId;
+        private Queue<Int32> _fileIds;
+        private Int32 _lastBatchId;
         private String _serverId;
 
-        public FileBatchPersister(string filePath) : this(filePath, new JavaScriptJsonSerializer())
+        public FileBatchPersister(String filePath) : this(filePath, JavaScriptJsonSerializerWithCache.Instance)
         {
         }
 
-        public FileBatchPersister(string filePath, IJsonSerializer serializer)
+        public FileBatchPersister(String filePath, IJsonSerializer serializer)
         {
             if (!Directory.Exists(filePath))
             {
@@ -62,10 +62,10 @@ namespace AppmetrCS.Persister
                     return null;
                 }
 
-                int batchId = _fileIds.Peek();
-                string batchFilePath = Path.Combine(_filePath, GetBatchFileName(batchId));
+                var batchId = _fileIds.Peek();
+                var batchFilePath = Path.Combine(_filePath, GetBatchFileName(batchId));
 
-                Log.Debug(String.Format("Try to get file {0}", batchFilePath));
+                Log.Debug($"Try to get file {batchFilePath}");
                 if (File.Exists(batchFilePath))
                 {
                     Log.DebugFormat("File {0} exists!", batchFilePath);
@@ -116,7 +116,7 @@ namespace AppmetrCS.Persister
         {
             _lock.AcquireWriterLock(-1);
 
-            string batchFilePath = Path.Combine(_filePath, GetBatchFileName(_lastBatchId));
+            var batchFilePath = Path.Combine(_filePath, GetBatchFileName(_lastBatchId));
             try
             {
                 using (var fileStream = new FileStream(batchFilePath, FileMode.CreateNew))
@@ -171,7 +171,7 @@ namespace AppmetrCS.Persister
 
         private void InitPersistedFiles()
         {
-            string[] files = Directory.GetFiles(_filePath, String.Format("{0}*", BatchFilePrefix));
+            var files = Directory.GetFiles(_filePath, $"{BatchFilePrefix}*");
 
             var ids = files
                 .Select(file => Convert.ToInt32(Path.GetFileName(file).Substring(BatchFilePrefix.Length)))
@@ -209,7 +209,7 @@ namespace AppmetrCS.Persister
                 }
             }
 
-            _fileIds = new Queue<int>(ids);
+            _fileIds = new Queue<Int32>(ids);
         }
 
         private void UpdateLastBatchId()
@@ -218,12 +218,12 @@ namespace AppmetrCS.Persister
             File.WriteAllText(_batchIdFile, Convert.ToString(_lastBatchId));
         }
 
-        private String GetBatchFileName(int batchId)
+        private String GetBatchFileName(Int32 batchId)
         {
-            return String.Format("{0}{1:D11}", BatchFilePrefix, batchId);
+            return $"{BatchFilePrefix}{batchId:D11}";
         }
 
-        public void SetServerId(string serverId)
+        public void SetServerId(String serverId)
         {
             _serverId = serverId;
         }
