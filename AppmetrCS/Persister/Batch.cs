@@ -13,9 +13,9 @@ namespace AppmetrCS.Persister
 
     [DataContract]
     [KnownType(typeof(AttachProperties))]
-    [KnownType(typeof(Event))]
-    [KnownType(typeof(Level))]
-    [KnownType(typeof(Payment))]
+    [KnownType(typeof(TrackEvent))]
+    [KnownType(typeof(TrackLevel))]
+    [KnownType(typeof(TrackPayment))]
     [KnownType(typeof(TrackSession))]
     public class Batch
     {

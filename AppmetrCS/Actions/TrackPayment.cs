@@ -8,7 +8,7 @@
     #endregion
 
     [DataContract]
-    public class Payment : AppMetrAction
+    public class TrackPayment : AppMetrAction
     {
         private const String ACTION = "trackPayment";
 
@@ -33,11 +33,11 @@
         [DataMember(Name = "appCurrencyAmount")]
         private String _appCurrencyAmount;
 
-        protected Payment()
+        protected TrackPayment()
         {
         }
 
-        public Payment(String orderId,
+        public TrackPayment(String orderId,
             String transactionId,
             String processor,
             String psUserSpentCurrencyCode,
@@ -46,7 +46,7 @@
         {
         }
 
-        public Payment(String orderId,
+        public TrackPayment(String orderId,
             String transactionId,
             String processor,
             String psUserSpentCurrencyCode,

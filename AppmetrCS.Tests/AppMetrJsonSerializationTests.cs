@@ -102,10 +102,10 @@ namespace AppmetrCS.Tests
 
         private static Batch CreateBatch(Int32 size)
         {
-            var events = new List<Event>();
+            var events = new List<TrackEvent>();
             for (var i = 0; i < size; i++)
             {
-                var evt = new Event("Event #" + i)
+                var evt = new TrackEvent("TrackEvent #" + i)
                 {
                     Properties = new Dictionary<String, Object>
                     {

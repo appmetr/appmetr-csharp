@@ -54,9 +54,9 @@
   <ItemGroup>
     <Compile Include="Actions\AppMetrAction.cs" />
     <Compile Include="Actions\AttachProperties.cs" />
-    <Compile Include="Actions\Event.cs" />
-    <Compile Include="Actions\Level.cs" />
-    <Compile Include="Actions\Payment.cs" />
+    <Compile Include="Actions\TrackEvent.cs" />
+    <Compile Include="Actions\TrackLevel.cs" />
+    <Compile Include="Actions\TrackPayment.cs" />
     <Compile Include="Actions\TrackSession.cs" />
     <Compile Include="AppMetr.cs" />
     <Compile Include="AppMetrTimer.cs" />
