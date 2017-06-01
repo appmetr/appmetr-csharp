@@ -11,7 +11,7 @@
     public class MemoryBatchPersister : IBatchPersister
     {
         private readonly Queue<Batch> _batchQueue = new Queue<Batch>();
-        private Int32 _batchId = 0;
+        private Int32 _batchId;
         private String _serverId;
 
         public Batch GetNext()
@@ -38,9 +38,9 @@
             }
         }
 
-        public void SetServerId(string serverId)
+        public String ServerId
         {
-            _serverId = serverId;
+            set => _serverId = value;
         }
     }
 }

@@ -223,9 +223,9 @@ namespace AppmetrCS.Persister
             return $"{BatchFilePrefix}{batchId:D11}";
         }
 
-        public void SetServerId(String serverId)
+        public String ServerId
         {
-            _serverId = serverId;
+            set => _serverId = value;
         }
     }
 }
