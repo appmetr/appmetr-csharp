@@ -36,7 +36,12 @@ namespace AppmetrCS.Persister
         {
             ServerId = serverId;
             BatchId = batchId;
-            Actions = new List<AppMetrAction>(actionList);
+            Actions = new List<AppMetrAction>();
+
+            if (actionList != null)
+            {
+                Actions.AddRange(actionList);
+            }
         }
 
         public override String ToString()

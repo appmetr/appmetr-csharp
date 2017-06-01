@@ -23,7 +23,7 @@ namespace AppmetrCS.Tests
         [Fact]
         public void BatchJavaScriptJsonSerializer()
         {
-            var batch = CreateBatch(3);
+            var batch = CreateBatch();
             var serializer = new JavaScriptJsonSerializer();
             BatchSerializationDeserialization(batch, serializer);
         }
@@ -31,7 +31,7 @@ namespace AppmetrCS.Tests
         [Fact]
         public void BatchJavaScriptJsonSerializerWithCache()
         {
-            var batch = CreateBatch(3);
+            var batch = CreateBatch();
             var serializer = new JavaScriptJsonSerializerWithCache();
             BatchSerializationDeserialization(batch, serializer);
         }
@@ -39,13 +39,15 @@ namespace AppmetrCS.Tests
         protected void BatchSerializationDeserialization(Batch batch, IJsonSerializer serializer)
         {
             var json = serializer.Serialize(batch);
+            _output.WriteLine(json);
             var deserializedBatch = serializer.Deserialize<Batch>(json);
+            _output.WriteLine(batch.ToString());
+            _output.WriteLine(deserializedBatch.ToString());
 
             Assert.Equal(batch.BatchId, deserializedBatch.BatchId);
             Assert.Equal(batch.ServerId, deserializedBatch.ServerId);
             Assert.Equal(batch.Actions.Count, deserializedBatch.Actions.Count);
             
-            _output.WriteLine(json);
             
             for (var i = 0; i < batch.Actions.Count; i++)
             {
@@ -82,7 +84,7 @@ namespace AppmetrCS.Tests
         [Fact]
         public void SerializersBench()
         {
-            var batch = CreateBatch(1);
+            var batch = CreateBatch();
 
             var defaultSerializer = new JavaScriptJsonSerializer();
 
@@ -100,25 +102,52 @@ namespace AppmetrCS.Tests
             _output.WriteLine("Default: " + defaultTime.Elapsed);
         }
 
-        private static Batch CreateBatch(Int32 size)
+        private static Batch CreateBatch()
         {
-            var events = new List<TrackEvent>();
-            for (var i = 0; i < size; i++)
+            var trackEvent = new TrackEvent("TrackEvent #1")
             {
-                var evt = new TrackEvent("TrackEvent #" + i)
+                Properties = new Dictionary<String, Object>
                 {
-                    Properties = new Dictionary<String, Object>
-                    {
-                        {"index", i},
-                        {"string", "aaa"},
-                        {"int", 1000},
-                        {"long", Int64.MaxValue},
-                    }
-                };
-                events.Add(evt);
-            }
+                    {"index", 1},
+                    {"string", "my event"},
+                    {"int", 11},
+                    {"long", Int64.MaxValue}
+                }
+            };
+            var attachProperties = new AttachProperties
+            {
+                Properties = new Dictionary<String, Object>
+                {
+                    {"index", 2},
+                    {"string", "my props"},
+                    {"int", 22}
+                }
+            };
+            var trackLevel = new TrackLevel(5)
+            {
+                Properties = new Dictionary<String, Object>
+                {
+                    {"index", 3},
+                    {"string", "my level"},
+                    {"int", 33}
+                }
+            };
+            var trackSession = new TrackSession
+            {
+                Properties = new Dictionary<String, Object>
+                {
+                    {"index", 4},
+                    {"string", "my session"},
+                    {"int", 44}
+                }
+            };
 
-            var batch = new Batch(Guid.NewGuid().ToString(), 1, events);
+            var actions = new List<AppMetrAction>();
+            actions.Add(trackEvent);
+            actions.Add(attachProperties);
+            actions.Add(trackLevel);
+
+            var batch = new Batch(Guid.NewGuid().ToString(), 1, actions);
             return batch;
         }
     }
