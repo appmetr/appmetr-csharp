@@ -141,12 +141,22 @@ namespace AppmetrCS.Tests
                     {"int", 44}
                 }
             };
+            var trackPayment = new TrackPayment("order 1", "transaction 1", "processor 1", "user currency USD", "user amount 100", "app currency RUB", "app amount 600")
+            {
+                Properties = new Dictionary<String, Object>
+                {
+                    {"index", 5},
+                    {"string", "my payment"},
+                    {"int", 55}
+                }
+            };
 
             var actions = new List<AppMetrAction>();
             actions.Add(trackEvent);
             actions.Add(attachProperties);
             actions.Add(trackLevel);
             actions.Add(trackSession);
+            actions.Add(trackPayment);
 
             var batch = new Batch(Guid.NewGuid().ToString(), 1, actions);
             return batch;

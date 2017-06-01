@@ -13,26 +13,26 @@
         private const String ACTION = "trackPayment";
 
         [DataMember(Name = "orderId")]
-        private String _orderId;
+        public String OrderId { get; set; }
 
         [DataMember(Name = "transactionId")]
-        private String _transactionId;
+        public String TransactionId { get; set; }
 
         [DataMember(Name = "processor")]
-        private String _processor;
+        public String Processor { get; set; }
 
         [DataMember(Name = "psUserSpentCurrencyCode")]
-        private String _psUserSpentCurrencyCode;
+        public String PsUserSpentCurrencyCode { get; set; }
 
         [DataMember(Name = "psUserSpentCurrencyAmount")]
-        private String _psUserSpentCurrencyAmount;
+        public String PsUserSpentCurrencyAmount { get; set; }
 
         [DataMember(Name = "appCurrencyCode")]
-        private String _appCurrencyCode;
+        public String AppCurrencyCode { get; set; }
 
         [DataMember(Name = "appCurrencyAmount")]
-        private String _appCurrencyAmount;
-
+        public String AppCurrencyAmount { get; set; }
+        
         protected TrackPayment()
         {
         }
@@ -54,60 +54,33 @@
             String appCurrencyCode,
             String appCurrencyAmount) : base(ACTION)
         {
-            _orderId = orderId;
-            _transactionId = transactionId;
-            _processor = processor;
-            _psUserSpentCurrencyCode = psUserSpentCurrencyCode;
-            _psUserSpentCurrencyAmount = psUserSpentCurrencyAmount;
-            _appCurrencyCode = appCurrencyCode;
-            _appCurrencyAmount = appCurrencyAmount;
+            OrderId = orderId;
+            TransactionId = transactionId;
+            Processor = processor;
+            PsUserSpentCurrencyCode = psUserSpentCurrencyCode;
+            PsUserSpentCurrencyAmount = psUserSpentCurrencyAmount;
+            AppCurrencyCode = appCurrencyCode;
+            AppCurrencyAmount = appCurrencyAmount;
         }
 
-        public String GetOrderId()
-        {
-            return _orderId;
-        }
 
-        public String GetTransactionId()
-        {
-            return _transactionId;
-        }
-
-        public String GetProcessor()
-        {
-            return _processor;
-        }
-
-        public String GetPsUserSpentCurrencyCode()
-        {
-            return _psUserSpentCurrencyCode;
-        }
-
-        public String GetPsUserSpentCurrencyAmount()
-        {
-            return _psUserSpentCurrencyAmount;
-        }
-
-        public String GetAppCurrencyCode()
-        {
-            return _appCurrencyCode;
-        }
-
-        public String GetAppCurrencyAmount()
-        {
-            return _appCurrencyAmount;
-        }
-
-        public override int CalcApproximateSize()
+        public override Int32 CalcApproximateSize()
         {
             return base.CalcApproximateSize()
-                   + GetStringLength(_orderId)
-                   + GetStringLength(_transactionId)
-                   + GetStringLength(_processor)
-                   + GetStringLength(_psUserSpentCurrencyCode)
-                   + GetStringLength(_psUserSpentCurrencyAmount)
-                   + GetStringLength(_appCurrencyCode)
-                   + GetStringLength(_appCurrencyAmount);
+                   + GetStringLength(OrderId)
+                   + GetStringLength(TransactionId)
+                   + GetStringLength(Processor)
+                   + GetStringLength(PsUserSpentCurrencyCode)
+                   + GetStringLength(PsUserSpentCurrencyAmount)
+                   + GetStringLength(AppCurrencyCode)
+                   + GetStringLength(AppCurrencyAmount);
+        }
+                
+        public override String ToString()
+        {
+            return $"{base.ToString()},orderId={OrderId}, transactionId={TransactionId}, processor={Processor}, " +
+                   $"psUserSpentCurrencyCode={PsUserSpentCurrencyCode}, psUserSpentCurrncyAmout={PsUserSpentCurrencyAmount}, " +
+                   $"appCurrencyCode={AppCurrencyCode}, appCurrencyAmount={AppCurrencyAmount}";
         }
     }
 }
