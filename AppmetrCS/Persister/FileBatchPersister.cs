@@ -67,7 +67,7 @@ namespace AppmetrCS.Persister
                 Log.Debug($"Try to get file {batchFilePath}");
                 if (File.Exists(batchFilePath))
                 {
-                    Log.DebugFormat("File {0} exists!", batchFilePath);
+                    Log.DebugFormat("File {0} exists", batchFilePath);
 
                     using (var fileStream = new FileStream(batchFilePath, FileMode.Open))
                     using (var deflateStream = new DeflateStream(fileStream, CompressionMode.Decompress))
@@ -118,7 +118,7 @@ namespace AppmetrCS.Persister
             var batchFilePath = Path.Combine(_filePath, GetBatchFileName(_lastBatchId));
             try
             {
-                using (var fileStream = new FileStream(batchFilePath, FileMode.CreateNew))
+                using (var fileStream = new FileStream(batchFilePath, FileMode.Create))
                 using (var deflateStream = new DeflateStream(fileStream, CompressionMode.Compress))
                 {
                     if (Log.IsDebugEnabled)
@@ -171,31 +171,27 @@ namespace AppmetrCS.Persister
         private void InitPersistedFiles()
         {
             var files = Directory.GetFiles(_filePath, $"{BatchFilePrefix}*");
-
+            
             var ids = files
                 .Select(file => Convert.ToInt32(Path.GetFileName(file).Substring(BatchFilePrefix.Length)))
                 .OrderBy(_ => _)
                 .ToList();
 
             String batchId = null;
-            if (File.Exists(_batchIdFile) && (batchId = File.ReadAllText(_batchIdFile)).Length > 0)
-            {
-				try {
-                	_lastBatchId = Convert.ToInt32(batchId);
-				}catch(Exception e){
-					Log.Error("Error loading reading last batch id. Counting files",e);
-					batchId = null;
-				}
+            try {
+                if (File.Exists(_batchIdFile) && (batchId = File.ReadAllText(_batchIdFile)).Length > 0)
+                {
+                    _lastBatchId = Convert.ToInt32(batchId);
+                }
+            } catch(Exception e){
+                Log.Error("Error loading reading last batch id. Counting files", e);
+                batchId = null;
             }
 
-			if (batchId == null && ids.Count > 0)
-            {
-                _lastBatchId = ids[ids.Count - 1];
-            }
-            else
-            {
-                _lastBatchId = 0;
-            }
+			if (batchId == null)
+			{
+			    _lastBatchId = ids.Count > 0 ? ids[ids.Count - 1] : 0;
+			}
 
             Log.InfoFormat("Init lastBatchId with {0}", _lastBatchId);
 
@@ -217,7 +213,7 @@ namespace AppmetrCS.Persister
             File.WriteAllText(_batchIdFile, Convert.ToString(_lastBatchId));
         }
 
-        private String GetBatchFileName(Int32 batchId)
+        private static String GetBatchFileName(Int32 batchId)
         {
             return $"{BatchFilePrefix}{batchId:D11}";
         }

@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{4DB6FBE6-3852-4F8C-8327-8C5A835AAD5D}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>AppmetrCS</RootNamespace>
     <AssemblyName>AppmetrCS</AssemblyName>
@@ -34,6 +34,9 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.3\lib\net35-full\log4net.dll</HintPath>
@@ -59,6 +62,7 @@
     <Compile Include="Actions\TrackPayment.cs" />
     <Compile Include="Actions\TrackSession.cs" />
     <Compile Include="AppMetr.cs" />
+    <Compile Include="AppmetrLaunch.cs" />
     <Compile Include="AppMetrTimer.cs" />
     <Compile Include="HttpRequestService.cs" />
     <Compile Include="LogUtils.cs" />

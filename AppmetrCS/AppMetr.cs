@@ -15,7 +15,7 @@ namespace AppmetrCS
 
     public class AppMetr
     {
-        private static readonly ILog Log = LogUtils.GetLogger(typeof (AppMetr));
+        private static readonly ILog Log = LogUtils.GetLogger(typeof(AppMetr));
 
         private readonly String _token;
         private readonly String _userId;
@@ -110,7 +110,7 @@ namespace AppmetrCS
             Flush();
         }
 
-        private void Flush()
+        public void Flush()
         {
             lock (_flushLock)
             {
@@ -136,7 +136,7 @@ namespace AppmetrCS
             }
         }
 
-        private void Upload()
+        public void Upload()
         {
             lock (_uploadLock)
             {
