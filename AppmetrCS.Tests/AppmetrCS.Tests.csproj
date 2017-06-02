@@ -58,7 +58,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppMetrJsonSerializationTests.cs" />
+    <Compile Include="AppMetrTests.cs" />
     <Compile Include="AppMetrTimerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

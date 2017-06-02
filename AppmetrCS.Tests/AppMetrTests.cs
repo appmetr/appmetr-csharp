@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using AppmetrCS.Actions;
 using AppmetrCS.Persister;
@@ -11,11 +12,11 @@ using Xunit.Abstractions;
 
 namespace AppmetrCS.Tests
 {
-    public class AppMetrJsonSerializationTests
+    public class AppMetrTests
     {
         private readonly ITestOutputHelper _output;
 
-        public AppMetrJsonSerializationTests(ITestOutputHelper output)
+        public AppMetrTests(ITestOutputHelper output)
         {
             _output = output;
         }
@@ -45,19 +46,8 @@ namespace AppmetrCS.Tests
             _output.WriteLine(deserializedBatch.ToString());
 
             Assert.Equal(batch.BatchId, deserializedBatch.BatchId);
-            Assert.Equal(batch.Actions.Count, deserializedBatch.Actions.Count);
             
-            
-            for (var i = 0; i < batch.Actions.Count; i++)
-            {
-                var expected = batch.Actions[i];
-                var actual = deserializedBatch.Actions[i];
-
-                Assert.Equal(expected.Action, actual.Action);
-                Assert.Equal(expected.UserId, actual.UserId);
-                Assert.Equal(expected.Timestamp, actual.Timestamp);
-                Assert.True(expected.Properties.Count == actual.Properties.Count && !expected.Properties.Except(actual.Properties).Any());
-            }
+            ValidateActions(batch.Actions, deserializedBatch.Actions);
         }
 
         [Fact]
@@ -81,26 +71,37 @@ namespace AppmetrCS.Tests
         }
 
         [Fact]
-        public void SerializersBench()
+        public void TestFilePersister ()
         {
-            var batch = CreateBatch();
+            var filePath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            var persister = new FileBatchPersister(filePath);
 
-            var defaultSerializer = new JavaScriptJsonSerializer();
+            var actions = CreateBatch().Actions;
+            persister.Persist(actions);
 
-            defaultSerializer.Serialize(batch);
+            var batch = persister.GetNext();
 
-            const Int32 iterationsCount = 100;
-
-            var defaultTime = Stopwatch.StartNew();
-            for (var i = 0; i < iterationsCount; i++)
-            {
-                defaultSerializer.Serialize(batch);
-            }
-            defaultTime.Stop();
-
-            _output.WriteLine("Default: " + defaultTime.Elapsed);
+            ValidateActions(actions, batch.Actions);
+            
+            persister.Remove();
         }
 
+        private static void ValidateActions(List<AppMetrAction> expectedActions, List<AppMetrAction> actualActions)
+        {
+            Assert.Equal(expectedActions.Count, actualActions.Count);
+
+            for (var i = 0; i < expectedActions.Count; i++)
+            {
+                var expected = expectedActions[i];
+                var actual = actualActions[i];
+
+                Assert.Equal(expected.Action, actual.Action);
+                Assert.Equal(expected.UserId, actual.UserId);
+                Assert.Equal(expected.Timestamp, actual.Timestamp);
+                Assert.True(expected.Properties.Count == actual.Properties.Count && !expected.Properties.Except(actual.Properties).Any());
+            }
+        }
+        
         private static Batch CreateBatch()
         {
             var trackEvent = new TrackEvent("TrackEvent #1")
