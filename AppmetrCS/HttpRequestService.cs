@@ -24,7 +24,7 @@ namespace AppmetrCS
 
         private const Int32 ReadWriteTimeout = 10 * 60 * 1000;
         private const Int32 WholeRquestTimeout = 12 * 60 * 1000;
-        private const String ServerMethodName = "server.trackS2S";
+        private const String ServerMethodName = "server.track";
         private readonly IJsonSerializer _serializer;
 
         public HttpRequestService() : this(JavaScriptJsonSerializerWithCache.Instance)
@@ -36,12 +36,13 @@ namespace AppmetrCS
             _serializer = serializer;
         }
 
-        public Boolean SendRequest(String httpUrl, String token, Batch batch)
+        public Boolean SendRequest(String httpUrl, String token, String userId, Batch batch)
         {
-            var @params = new Dictionary<String, String>(3)
+            var @params = new Dictionary<String, String>
             {
                 {"method", ServerMethodName},
                 {"token", token},
+                {"userId", userId},
                 {"timestamp", Convert.ToString(Utils.GetNowUnixTimestamp())}
             };
 
@@ -56,7 +57,7 @@ namespace AppmetrCS
                 deflatedBatch = memoryStream.ToArray();
             }
             
-            var request = (HttpWebRequest)WebRequest.Create(httpUrl + "?" + MakeQueryString(@params));
+            var request = (HttpWebRequest) WebRequest.Create(httpUrl + "?" + MakeQueryString(@params));
             request.Method = "POST";
             request.ContentType = "application/octet-stream";
             request.ContentLength = deflatedBatch.Length;

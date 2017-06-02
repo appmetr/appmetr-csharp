@@ -18,6 +18,7 @@ namespace AppmetrCS
         private static readonly ILog Log = LogUtils.GetLogger(typeof (AppMetr));
 
         private readonly String _token;
+        private readonly String _userId;
         private readonly String _url;
         private readonly IBatchPersister _batchPersister;
         private readonly HttpRequestService _httpRequestService;
@@ -38,23 +39,19 @@ namespace AppmetrCS
         private const Int32 FlushPeriod = MillisPerMinute/2;
         private const Int32 UploadPeriod = MillisPerMinute/2;
 
-        public AppMetr(
-            String token,
-            String url,
-            IBatchPersister batchPersister = null,
-            IJsonSerializer serializer = null)
+        public AppMetr(String url, String token, String userId, String filePath) : this(url, token, userId, new FileBatchPersister(filePath)) {}
+
+        public AppMetr(String url, String token, String userId, IBatchPersister batchPersister = null, IJsonSerializer serializer = null)
         {
             Log.InfoFormat("Start Appmetr for token={0}, url={1}", token, url);
 
             _token = token;
             _url = url;
+            _userId = userId;
             _batchPersister = batchPersister ?? new MemoryBatchPersister();
             _httpRequestService = new HttpRequestService(serializer ?? JavaScriptJsonSerializerWithCache.Instance);
             _flushTimer = new AppMetrTimer(FlushPeriod, Flush, "FlushJob");
             _uploadTimer = new AppMetrTimer(UploadPeriod, Upload, "UploadJob");
-
-            new Thread(_flushTimer.Start).Start();
-            new Thread(_uploadTimer.Start).Start();
         }
 
         public void Track(AppMetrAction action)
@@ -86,6 +83,12 @@ namespace AppmetrCS
             {
                 Log.Error("Track failed", e);
             }
+        }
+        
+        public void Start()
+        {
+            new Thread(_flushTimer.Start).Start();
+            new Thread(_uploadTimer.Start).Start();
         }
 
         public void Stop()
@@ -147,7 +150,7 @@ namespace AppmetrCS
                     allBatchCounter++;
 
                     Log.DebugFormat("Starting send batch with id={0}", batch.BatchId);
-                    if (_httpRequestService.SendRequest(_url, _token, batch))
+                    if (_httpRequestService.SendRequest(_url, _token, _userId, batch))
                     {
                         Log.DebugFormat("Successfuly send batch with id={0}", batch.BatchId);
 
