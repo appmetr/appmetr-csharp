@@ -18,9 +18,9 @@ namespace AppmetrCS
 
     #endregion
 
-    internal class HttpRequestService
+    public class HttpRequestService
     {
-        private static readonly ILog Log = LogUtils.GetLogger(typeof (HttpRequestService));
+        private static readonly ILog Log = LogUtils.GetLogger(typeof(HttpRequestService));
 
         private const Int32 ReadWriteTimeout = 10 * 60 * 1000;
         private const Int32 WholeRquestTimeout = 12 * 60 * 1000;
@@ -38,13 +38,7 @@ namespace AppmetrCS
 
         public Boolean SendRequest(String httpUrl, String token, String userId, Batch batch)
         {
-            var @params = new Dictionary<String, String>
-            {
-                {"method", ServerMethodName},
-                {"token", token},
-                {"userId", userId},
-                {"timestamp", Convert.ToString(Utils.GetNowUnixTimestamp())}
-            };
+            var @params = CreateRequestParemeters(token, userId);
 
             Byte[] deflatedBatch;
             var serializedBatch = Utils.SerializeBatch(batch, _serializer);
@@ -57,12 +51,7 @@ namespace AppmetrCS
                 deflatedBatch = memoryStream.ToArray();
             }
             
-            var request = (HttpWebRequest) WebRequest.Create(httpUrl + "?" + MakeQueryString(@params));
-            request.Method = "POST";
-            request.ContentType = "application/octet-stream";
-            request.ContentLength = deflatedBatch.Length;
-            request.Timeout = WholeRquestTimeout;
-            request.ReadWriteTimeout = ReadWriteTimeout;
+            var request = CreateWebRequest(httpUrl, deflatedBatch.Length, @params);
 
             Log.DebugFormat("Getting request (contentLength = {0}) stream for batch with id={1}", deflatedBatch.Length, batch.BatchId);
             using (var stream = request.GetRequestStream())
@@ -101,6 +90,28 @@ namespace AppmetrCS
             return false;
         }
 
+        protected Dictionary<String, String> CreateRequestParemeters(String token, String userId)
+        {
+            return new Dictionary<String, String>
+            {
+                {"method", ServerMethodName},
+                {"token", token},
+                {"userId", userId},
+                {"timestamp", Convert.ToString(Utils.GetNowUnixTimestamp())}
+            };
+        }
+
+        protected HttpWebRequest CreateWebRequest(String url, Int64 contentLenght, Dictionary<String, String> @params)
+        {
+            var request = (HttpWebRequest) WebRequest.Create(url + "?" + MakeQueryString(@params));
+            request.Method = "POST";
+            request.ContentType = "application/octet-stream";
+            request.ContentLength = contentLenght;
+            request.Timeout = WholeRquestTimeout;
+            request.ReadWriteTimeout = ReadWriteTimeout;
+            return request;
+        }
+        
         private static String MakeQueryString(Dictionary<String, String> @params)
         {
             var queryBuilder = new StringBuilder();

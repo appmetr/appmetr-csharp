@@ -41,7 +41,7 @@ namespace AppmetrCS
 
         public AppMetr(String url, String token, String userId, String filePath) : this(url, token, userId, new FileBatchPersister(filePath)) {}
 
-        public AppMetr(String url, String token, String userId, IBatchPersister batchPersister = null, IJsonSerializer serializer = null)
+        public AppMetr(String url, String token, String userId, IBatchPersister batchPersister = null, HttpRequestService httpRequestService = null)
         {
             Log.InfoFormat("Start Appmetr for token={0}, url={1}", token, url);
 
@@ -49,7 +49,7 @@ namespace AppmetrCS
             _url = url;
             _userId = userId;
             _batchPersister = batchPersister ?? new MemoryBatchPersister();
-            _httpRequestService = new HttpRequestService(serializer ?? JavaScriptJsonSerializerWithCache.Instance);
+            _httpRequestService = httpRequestService ?? new HttpRequestService();
             _flushTimer = new AppMetrTimer(FlushPeriod, Flush, "FlushJob");
             _uploadTimer = new AppMetrTimer(UploadPeriod, Upload, "UploadJob");
         }
