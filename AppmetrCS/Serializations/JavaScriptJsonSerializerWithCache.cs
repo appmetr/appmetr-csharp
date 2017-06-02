@@ -39,10 +39,9 @@ namespace AppmetrCS.Serializations
         /// </summary>
         internal class BatchJsonConverter : JavaScriptConverter
         {
-            private const String TypeFieldName = "___type";
-            //We couldn't use __ prefix, cause this prefix are used for DataContractSerializer and Deserialize method throw Exception
+            private const String TypeFieldName = "$type";
 
-            private static readonly Dictionary<Type, TypeDescription> _typeDescriptions
+            private static readonly Dictionary<Type, TypeDescription> TypeDescriptions
                 = new Dictionary<Type, TypeDescription>();
 
             public override Object Deserialize(
@@ -61,7 +60,7 @@ namespace AppmetrCS.Serializations
                 var typeDescription = GetTypeDescription(objType);
                 if (!typeDescription.Serializable) return null;
 
-                var result = new Dictionary<String, Object> { { TypeFieldName, objType.AssemblyQualifiedName } };
+                var result = new Dictionary<String, Object> { { TypeFieldName, objType.FullName } };
 
                 ProcessFieldsAndProperties(typeDescription,
                     (name, info) =>
@@ -169,9 +168,9 @@ namespace AppmetrCS.Serializations
             private static TypeDescription GetTypeDescription(Type type)
             {               
                 TypeDescription result;
-                lock (_typeDescriptions)
+                lock (TypeDescriptions)
                 {
-                    if (_typeDescriptions.TryGetValue(type, out result)) return result;
+                    if (TypeDescriptions.TryGetValue(type, out result)) return result;
                 }
 
                 const BindingFlags bindingFlags =
@@ -185,9 +184,9 @@ namespace AppmetrCS.Serializations
                         new SerializableField[0],
                         new SerializableProperty[0]);
 
-                    lock (_typeDescriptions)
+                    lock (TypeDescriptions)
                     {
-                        _typeDescriptions[type] = result;
+                        TypeDescriptions[type] = result;
                     }
                     return result;
                 }
@@ -218,8 +217,8 @@ namespace AppmetrCS.Serializations
                     fields.ToArray(),
                     properties.ToArray());
 
-                lock (_typeDescriptions) {
-                    _typeDescriptions[type] = result;
+                lock (TypeDescriptions) {
+                    TypeDescriptions[type] = result;
                 }
                 return result;
             }

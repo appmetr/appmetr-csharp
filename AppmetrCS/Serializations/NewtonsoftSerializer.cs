@@ -5,6 +5,8 @@ namespace AppmetrCS.Serializations
 {
     public class NewtonsoftSerializer : IJsonSerializer
     {
+        public static readonly NewtonsoftSerializer Instance = new NewtonsoftSerializer();
+        
         private readonly JsonSerializerSettings _jsonSerializerSettings =
             new JsonSerializerSettings {TypeNameHandling = TypeNameHandling.Auto};
         

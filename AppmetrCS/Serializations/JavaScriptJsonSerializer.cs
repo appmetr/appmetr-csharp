@@ -11,6 +11,8 @@ namespace AppmetrCS.Serializations
 {
     public class JavaScriptJsonSerializer : IJsonSerializer
     {
+        public static readonly JavaScriptJsonSerializer Instance = new JavaScriptJsonSerializer();
+        
         private static readonly JavaScriptSerializer Serializer;
 
         static JavaScriptJsonSerializer()
@@ -37,8 +39,7 @@ namespace AppmetrCS.Serializations
         /// </summary>
         internal class BatchJsonConverter : JavaScriptConverter
         {
-            private const String TypeFieldName = "___type";
-            //We couldn't use __ prefix, cause this prefix are used for DataContractSerializer and Deserialize method throw Exception
+            private const String TypeFieldName = "$type";
 
             public override Object Deserialize(IDictionary<String, Object> dictionary, Type type,
                 JavaScriptSerializer serializer)
@@ -53,7 +54,7 @@ namespace AppmetrCS.Serializations
                 var objType = obj.GetType();
                 if (Attribute.GetCustomAttribute(objType, typeof(DataContractAttribute)) == null) return null;
 
-                var result = new Dictionary<String, Object> { { TypeFieldName, objType.AssemblyQualifiedName } };
+                var result = new Dictionary<String, Object> { { TypeFieldName, objType.FullName } };
 
                 ProcessFieldsAndProperties(obj,
                     (attribute, info) =>
