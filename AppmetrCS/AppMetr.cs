@@ -17,9 +17,10 @@ namespace AppmetrCS
     {
         private static readonly ILog Log = LogUtils.GetLogger(typeof(AppMetr));
 
-        private readonly String _token;
-        private readonly String _userId;
         private readonly String _url;
+        private readonly String _token;
+        private readonly String _mobUuid;
+        private readonly String _mobDeviceType;
         private readonly IBatchPersister _batchPersister;
         private readonly HttpRequestService _httpRequestService;
 
@@ -39,15 +40,16 @@ namespace AppmetrCS
         private const Int32 FlushPeriod = MillisPerMinute/2;
         private const Int32 UploadPeriod = MillisPerMinute/2;
 
-        public AppMetr(String url, String token, String userId, String filePath) : this(url, token, userId, new FileBatchPersister(filePath)) {}
+        public AppMetr(String url, String token, String mobUuid, String filePath) : this(url, token, mobUuid, batchPersister: new FileBatchPersister(filePath)) {}
 
-        public AppMetr(String url, String token, String userId, IBatchPersister batchPersister = null, HttpRequestService httpRequestService = null)
+        public AppMetr(String url, String token, String mobUuid, String mobDeviceType = "Facebook", IBatchPersister batchPersister = null, HttpRequestService httpRequestService = null)
         {
             Log.InfoFormat("Start Appmetr for token={0}, url={1}", token, url);
 
             _token = token;
             _url = url;
-            _userId = userId;
+            _mobUuid = mobUuid;
+            _mobDeviceType = mobDeviceType;
             _batchPersister = batchPersister ?? new MemoryBatchPersister();
             _httpRequestService = httpRequestService ?? new HttpRequestService();
             _flushTimer = new AppMetrTimer(FlushPeriod, Flush, "FlushJob");
@@ -150,7 +152,13 @@ namespace AppmetrCS
                     allBatchCounter++;
 
                     Log.DebugFormat("Starting send batch with id={0}", batch.BatchId);
-                    if (_httpRequestService.SendRequest(_url, _token, _userId, batch))
+                    
+                    if (_httpRequestService.SendRequest(_url, batch,  new Dictionary<String, String>
+                    {
+                        {"token", _token},
+                        {"mobUuid", _mobUuid},
+                        {"mobDeviceType", _mobDeviceType}
+                    }))
                     {
                         Log.DebugFormat("Successfuly send batch with id={0}", batch.BatchId);
 

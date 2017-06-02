@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Linq;
 using AppmetrCS.Serializations;
 using Newtonsoft.Json;
 
@@ -36,9 +37,9 @@ namespace AppmetrCS
             _serializer = serializer;
         }
 
-        public Boolean SendRequest(String httpUrl, String token, String userId, Batch batch)
+        public Boolean SendRequest(String httpUrl, Batch batch, Dictionary<String, String> extraParams)
         {
-            var @params = CreateRequestParemeters(token, userId);
+            var @params = CreateRequestParemeters(extraParams);
 
             Byte[] deflatedBatch;
             var serializedBatch = Utils.SerializeBatch(batch, _serializer);
@@ -90,15 +91,15 @@ namespace AppmetrCS
             return false;
         }
 
-        protected Dictionary<String, String> CreateRequestParemeters(String token, String userId)
+        protected Dictionary<String, String> CreateRequestParemeters(Dictionary<String, String> extraParams)
         {
-            return new Dictionary<String, String>
+            var mandatoryParams = new Dictionary<String, String>
             {
                 {"method", ServerMethodName},
-                {"token", token},
-                {"userId", userId},
                 {"timestamp", Convert.ToString(Utils.GetNowUnixTimestamp())}
             };
+
+            return mandatoryParams.Concat(extraParams).ToDictionary(p => p.Key, p => p.Value);
         }
 
         protected HttpWebRequest CreateWebRequest(String url, Int64 contentLenght, Dictionary<String, String> @params)
