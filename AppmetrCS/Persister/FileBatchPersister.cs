@@ -177,20 +177,25 @@ namespace AppmetrCS.Persister
                 .OrderBy(_ => _)
                 .ToList();
 
-            String batchId = null;
-            try {
-                if (File.Exists(_batchIdFile) && (batchId = File.ReadAllText(_batchIdFile)).Length > 0)
+            var batchId = Int32.MinValue;
+            try
+            {
+                String batchStr;
+                if (File.Exists(_batchIdFile) && (batchStr = File.ReadAllText(_batchIdFile)).Length > 0)
                 {
-                    _lastBatchId = Convert.ToInt32(batchId);
+                    batchId = Convert.ToInt32(batchStr);
                 }
-            } catch(Exception e){
+            } catch (Exception e) {
                 Log.Error("Error loading reading last batch id. Counting files", e);
-                batchId = null;
             }
 
-			if (batchId == null)
+			if (batchId == Int32.MinValue)
 			{
 			    _lastBatchId = ids.Count > 0 ? ids[ids.Count - 1] : 0;
+			}
+			else
+			{
+			    _lastBatchId = batchId;
 			}
 
             Log.InfoFormat("Init lastBatchId with {0}", _lastBatchId);
