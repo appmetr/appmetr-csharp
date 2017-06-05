@@ -23,8 +23,7 @@ namespace AppmetrCS
     {
         private static readonly ILog Log = LogUtils.GetLogger(typeof(HttpRequestService));
 
-        private const Int32 ReadWriteTimeout = 3 * 60 * 1000;
-        private const Int32 WholeRquestTimeout = 1 * 60 * 1000;
+        private const Int32 Timeout = 2 * 60 * 1000;
         private const String ServerMethodName = "server.track";
         private readonly IJsonSerializer _serializer;
 
@@ -108,8 +107,8 @@ namespace AppmetrCS
             request.Method = "POST";
             request.ContentType = "application/octet-stream";
             request.ContentLength = contentLenght;
-            request.Timeout = WholeRquestTimeout;
-            request.ReadWriteTimeout = ReadWriteTimeout;
+            request.Timeout = Timeout;
+            request.ReadWriteTimeout = Timeout;
             return request;
         }
         
