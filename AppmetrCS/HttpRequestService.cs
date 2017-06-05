@@ -23,8 +23,8 @@ namespace AppmetrCS
     {
         private static readonly ILog Log = LogUtils.GetLogger(typeof(HttpRequestService));
 
-        private const Int32 ReadWriteTimeout = 10 * 60 * 1000;
-        private const Int32 WholeRquestTimeout = 12 * 60 * 1000;
+        private const Int32 ReadWriteTimeout = 3 * 60 * 1000;
+        private const Int32 WholeRquestTimeout = 1 * 60 * 1000;
         private const String ServerMethodName = "server.track";
         private readonly IJsonSerializer _serializer;
 
