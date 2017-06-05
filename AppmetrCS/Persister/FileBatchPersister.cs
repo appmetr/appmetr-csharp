@@ -30,7 +30,7 @@ namespace AppmetrCS.Persister
         private Queue<Int32> _fileIds;
         private Int32 _lastBatchId;
 
-        public FileBatchPersister(String filePath) : this(filePath, JavaScriptJsonSerializerWithCache.Instance)
+        public FileBatchPersister(String filePath) : this(filePath, NewtonsoftSerializerTyped.Instance)
         {
         }
 

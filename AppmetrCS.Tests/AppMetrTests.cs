@@ -22,18 +22,10 @@ namespace AppmetrCS.Tests
         }
 
         [Fact]
-        public void BatchJavaScriptJsonSerializer()
+        public void BatchNewtonsoftSerializerTypedSerializer()
         {
             var batch = CreateBatch();
-            var serializer = new JavaScriptJsonSerializer();
-            BatchSerializationDeserialization(batch, serializer);
-        }
-        
-        [Fact]
-        public void BatchJavaScriptJsonSerializerWithCache()
-        {
-            var batch = CreateBatch();
-            var serializer = new JavaScriptJsonSerializerWithCache();
+            var serializer = new NewtonsoftSerializerTyped();
             BatchSerializationDeserialization(batch, serializer);
         }
         
@@ -98,56 +90,75 @@ namespace AppmetrCS.Tests
                 Assert.Equal(expected.Action, actual.Action);
                 Assert.Equal(expected.UserId, actual.UserId);
                 Assert.Equal(expected.Timestamp, actual.Timestamp);
-                Assert.True(expected.Properties.Count == actual.Properties.Count && !expected.Properties.Except(actual.Properties).Any());
+               ValidateProperties(expected.Properties, actual.Properties);
             }
+        }
+
+        private static void ValidateProperties(IDictionary<String, Object> expected, IDictionary<String, Object> actual)
+        {
+            Assert.True(expected.Keys.SequenceEqual(actual.Keys));
+            
+            foreach (var pair in expected)
+            {
+                if (pair.Value is String)
+                {
+                    Assert.Equal(pair.Value, actual[pair.Key]);
+                } else if (pair.Value is Int64 || pair.Value is Int32 || pair.Value is Int16)
+                {
+                    Assert.True(Convert.ToInt64(pair.Value) == Convert.ToInt64(actual[pair.Key]));
+                }
+                else if (pair.Value is Double || pair.Value is Single)
+                {
+                    Assert.True(Math.Abs(Convert.ToDouble(pair.Value) - Convert.ToDouble(actual[pair.Key])) <= Double.Epsilon);
+                }
+            }    
         }
         
         private static Batch CreateBatch()
         {
-            var trackEvent = new TrackEvent("TrackEvent #1")
+            var trackEvent = new TrackEvent("Hello")
             {
                 Properties = new Dictionary<String, Object>
                 {
-                    {"index", 1},
                     {"string", "my event"},
                     {"int", 11},
-                    {"long", Int64.MaxValue}
+                    {"double", 1.99}
                 }
             };
             var attachProperties = new AttachProperties
             {
                 Properties = new Dictionary<String, Object>
                 {
-                    {"index", 2},
                     {"string", "my props"},
-                    {"int", 22}
+                    {"int", 22},
+                    {"double", 2.99}
                 }
             };
             var trackLevel = new TrackLevel(5)
             {
                 Properties = new Dictionary<String, Object>
                 {
-                    {"index", 3},
                     {"string", "my level"},
-                    {"int", 33}
+                    {"int", 33},
+                    {"double", 3.99}
                 }
             };
             var trackSession = new TrackSession
             {
                 Properties = new Dictionary<String, Object>
                 {
-                    {"index", 4},
                     {"string", "my session"},
-                    {"int", 44}
+                    {"int", 44},
+                    {"double", 4.99}
                 }
             };
             var trackPayment = new TrackPayment("order 1", "transaction 1", "processor 1", "user currency USD", "user amount 100", "app currency RUB", "app amount 600")
             {
                 Properties = new Dictionary<String, Object>
                 {
-                    {"index", 5},
                     {"string", "my payment"},
-                    {"int", 55}
+                    {"int", 55},
+                    {"double", 5.99}
                 }
             };
 

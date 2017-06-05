@@ -23,7 +23,7 @@ namespace AppmetrCS
             return data;
         }
 
-        public static void WriteData(Stream stream, byte[] data)
+        public static void WriteData(Stream stream, Byte[] data)
         {
             stream.Write(data, 0, data.Length);
             stream.Flush();
@@ -34,7 +34,7 @@ namespace AppmetrCS
             Log.DebugFormat("Starting serialize batch with id={0}", batch.BatchId);
             var json = serializer.Serialize(batch);
             Log.DebugFormat("Get bytes from serialized batch with id={0}", batch.BatchId);
-            byte[] data = Encoding.UTF8.GetBytes(json);
+            var data = Encoding.UTF8.GetBytes(json);
             Log.DebugFormat("Write bytes to stream. Batch id={0}", batch.BatchId);
             stream.Write(data, 0, data.Length);
             Log.DebugFormat("Flush stream. Batch id={0}", batch.BatchId);
@@ -45,7 +45,8 @@ namespace AppmetrCS
         {
             try
             {
-                batch = serializer.Deserialize<Batch>(new StreamReader(stream).ReadToEnd());
+                var json = new StreamReader(stream).ReadToEnd();
+                batch = serializer.Deserialize<Batch>(json);
                 Log.InfoFormat("Successfully read the batch {0}", batch.BatchId);
                 return true;
             }

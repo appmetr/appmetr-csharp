@@ -7,17 +7,14 @@ namespace AppmetrCS.Serializations
     {
         public static readonly NewtonsoftSerializer Instance = new NewtonsoftSerializer();
         
-        private readonly JsonSerializerSettings _jsonSerializerSettings =
-            new JsonSerializerSettings {TypeNameHandling = TypeNameHandling.Auto};
-        
         public String Serialize(Object obj)
         {
-            return JsonConvert.SerializeObject(obj, _jsonSerializerSettings);
+            return JsonConvert.SerializeObject(obj);
         }
 
         public T Deserialize<T>(String json)
         {
-            return JsonConvert.DeserializeObject<T>(json, _jsonSerializerSettings);
+            return JsonConvert.DeserializeObject<T>(json);
         }
     }
 }

@@ -28,7 +28,7 @@ namespace AppmetrCS
         private const String ServerMethodName = "server.track";
         private readonly IJsonSerializer _serializer;
 
-        public HttpRequestService() : this(JavaScriptJsonSerializerWithCache.Instance)
+        public HttpRequestService() : this(NewtonsoftSerializer.Instance)
         {
         }
 
@@ -70,7 +70,7 @@ namespace AppmetrCS
                     Log.DebugFormat("Response received for batch with id={0}", batch.BatchId);
 
                     var streamReader = new StreamReader(response.GetResponseStream());
-                    var jsonResponse = NewtonsoftSerializer.Instance.Deserialize<JsonResponseWrapper>(streamReader.ReadToEnd());
+                    var jsonResponse = _serializer.Deserialize<JsonResponseWrapper>(streamReader.ReadToEnd());
 
                     if (jsonResponse.Error != null)
                     {
