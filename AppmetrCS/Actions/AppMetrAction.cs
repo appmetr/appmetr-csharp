@@ -77,7 +77,7 @@ namespace AppmetrCS.Actions
 
         protected Int32 GetStringLength(String str)
         {
-            return str == null ? 0 : str.Length * 2 + 26;    //24 - String object size, 16 - char[]
+            return str?.Length * 2 + 26 ?? 0;    //24 - String object size, 16 - char[]
         }
         
         public override String ToString()

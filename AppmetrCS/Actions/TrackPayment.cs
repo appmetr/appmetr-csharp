@@ -27,6 +27,12 @@
         [DataMember(Name = "psUserSpentCurrencyAmount")]
         public String PsUserSpentCurrencyAmount { get; set; }
 
+        [DataMember(Name = "psReceivedCurrencyCode")]
+        public String PsReceivedCurrencyCode { get; set; }
+
+        [DataMember(Name = "psReceivedCurrencyAmount")]
+        public String PsReceivedCurrencyAmount { get; set; }
+
         [DataMember(Name = "appCurrencyCode")]
         public String AppCurrencyCode { get; set; }
 
@@ -41,8 +47,11 @@
             String transactionId,
             String processor,
             String psUserSpentCurrencyCode,
-            String psUserSpentCurrencyAmount)
-            : this(orderId, transactionId, processor, psUserSpentCurrencyCode, psUserSpentCurrencyAmount, null, null)
+            String psUserSpentCurrencyAmount,
+            String psReceivedCurrencyCode,
+            String psReceivedCurrencyAmount)
+            : this(orderId, transactionId, processor, psUserSpentCurrencyCode, psUserSpentCurrencyAmount,
+                psReceivedCurrencyCode, psReceivedCurrencyAmount, null, null)
         {
         }
 
@@ -51,6 +60,8 @@
             String processor,
             String psUserSpentCurrencyCode,
             String psUserSpentCurrencyAmount,
+            String psReceivedCurrencyCode,
+            String psReceivedCurrencyAmount,
             String appCurrencyCode,
             String appCurrencyAmount) : base(ACTION)
         {
@@ -59,6 +70,8 @@
             Processor = processor;
             PsUserSpentCurrencyCode = psUserSpentCurrencyCode;
             PsUserSpentCurrencyAmount = psUserSpentCurrencyAmount;
+            PsReceivedCurrencyCode = psReceivedCurrencyCode;
+            PsReceivedCurrencyAmount = psReceivedCurrencyAmount;
             AppCurrencyCode = appCurrencyCode;
             AppCurrencyAmount = appCurrencyAmount;
         }
@@ -72,15 +85,24 @@
                    + GetStringLength(Processor)
                    + GetStringLength(PsUserSpentCurrencyCode)
                    + GetStringLength(PsUserSpentCurrencyAmount)
+                   + GetStringLength(PsReceivedCurrencyCode)
+                   + GetStringLength(PsReceivedCurrencyAmount)
                    + GetStringLength(AppCurrencyCode)
                    + GetStringLength(AppCurrencyAmount);
         }
                 
         public override String ToString()
         {
-            return $"{base.ToString()},orderId={OrderId}, transactionId={TransactionId}, processor={Processor}, " +
-                   $"psUserSpentCurrencyCode={PsUserSpentCurrencyCode}, psUserSpentCurrncyAmout={PsUserSpentCurrencyAmount}, " +
-                   $"appCurrencyCode={AppCurrencyCode}, appCurrencyAmount={AppCurrencyAmount}";
+            return $"{base.ToString()}, " +
+                   $"OrderId: {OrderId}, " +
+                   $"TransactionId: {TransactionId}, " +
+                   $"Processor: {Processor}, " +
+                   $"PsUserSpentCurrencyCode: {PsUserSpentCurrencyCode}, " +
+                   $"PsUserSpentCurrencyAmount: {PsUserSpentCurrencyAmount}, " +
+                   $"PsReceivedCurrencyCode: {PsReceivedCurrencyCode}, " +
+                   $"PsReceivedCurrencyAmount: {PsReceivedCurrencyAmount}, " +
+                   $"AppCurrencyCode: {AppCurrencyCode}, " +
+                   $"AppCurrencyAmount: {AppCurrencyAmount}";
         }
     }
 }

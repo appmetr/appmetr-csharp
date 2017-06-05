@@ -152,7 +152,7 @@ namespace AppmetrCS.Tests
                     {"double", 4.99}
                 }
             };
-            var trackPayment = new TrackPayment("order 1", "transaction 1", "processor 1", "user currency USD", "user amount 100", "app currency RUB", "app amount 600")
+            var trackPayment = new TrackPayment("order 1", "transaction 1", "processor 1", "USD", "100", "RUB", "600")
             {
                 Properties = new Dictionary<String, Object>
                 {

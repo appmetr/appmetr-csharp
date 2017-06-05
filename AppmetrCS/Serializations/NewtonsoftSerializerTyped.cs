@@ -8,7 +8,11 @@ namespace AppmetrCS.Serializations
         public static readonly NewtonsoftSerializerTyped Instance = new NewtonsoftSerializerTyped();
         
         private readonly JsonSerializerSettings _jsonSerializerSettings =
-            new JsonSerializerSettings {TypeNameHandling = TypeNameHandling.Auto};
+            new JsonSerializerSettings 
+            {
+                NullValueHandling = NullValueHandling.Ignore, 
+                TypeNameHandling = TypeNameHandling.Auto
+            };
         
         public String Serialize(Object obj)
         {
