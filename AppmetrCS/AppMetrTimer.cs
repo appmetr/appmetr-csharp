@@ -4,7 +4,6 @@
 
     using System;
     using System.Threading;
-    using log4net;
 
     #endregion
 

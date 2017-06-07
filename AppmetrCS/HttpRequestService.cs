@@ -14,7 +14,6 @@ namespace AppmetrCS
     using System.Runtime.Serialization;
     using System.Text;
     using System.Web;
-    using log4net;
     using Persister;
 
     #endregion

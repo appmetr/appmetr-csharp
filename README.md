@@ -23,3 +23,8 @@ Stop it:
 appMetr.Stop();
 ```
 
+To enable logging you should set it up:
+```csharp
+LogUtils.CustomLog = myLog;
+```
+

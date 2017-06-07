@@ -8,7 +8,6 @@ namespace AppmetrCS
     using System.Collections.Generic;
     using System.Threading;
     using Actions;
-    using log4net;
     using Persister;
 
     #endregion

@@ -11,7 +11,6 @@ namespace AppmetrCS.Persister
     using System.Linq;
     using System.Threading;
     using Actions;
-    using log4net;
 
     #endregion
 

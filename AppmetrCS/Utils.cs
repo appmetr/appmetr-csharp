@@ -3,7 +3,6 @@ using System.IO;
 using System.Text;
 using AppmetrCS.Persister;
 using AppmetrCS.Serializations;
-using log4net;
 
 namespace AppmetrCS
 {
