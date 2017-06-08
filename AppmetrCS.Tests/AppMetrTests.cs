@@ -165,6 +165,21 @@ namespace AppmetrCS.Tests
                     {"double", 6.99}
                 }
             };
+            var trackState = new TrackState()
+            {
+                Properties = new Dictionary<String, Object>
+                {
+                    {"string", "my state"},
+                    {"int", 77},
+                    {"double", 7.99}
+                },
+                State = new Dictionary<String, Object>
+                {
+                    {"string", "new state"},
+                    {"int", 7},
+                    {"double", 77.99}
+                }
+            };
 
             var actions = new List<AppMetrAction>();
             actions.Add(trackEvent);
@@ -173,6 +188,7 @@ namespace AppmetrCS.Tests
             actions.Add(trackSession);
             actions.Add(trackPayment);
             actions.Add(trackIdentify);
+            actions.Add(trackState);
 
             var batch = new Batch(1, actions);
             return batch;

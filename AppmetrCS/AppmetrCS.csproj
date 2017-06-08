@@ -60,6 +60,7 @@
     <Compile Include="Actions\TrackLevel.cs" />
     <Compile Include="Actions\TrackPayment.cs" />
     <Compile Include="Actions\TrackSession.cs" />
+    <Compile Include="Actions\TrackState.cs" />
     <Compile Include="AppMetr.cs" />
     <Compile Include="AppMetrTimer.cs" />
     <Compile Include="HttpRequestService.cs" />

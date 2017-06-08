@@ -83,7 +83,7 @@ namespace AppmetrCS.Actions
         public override String ToString()
         {
             return $"{GetType().Name}{{action={Action}, timestamp={Timestamp}, userId={UserId}, " +
-                   $"properties{"{" + String.Join(",", Properties.Select(kv => kv.Key + "=" + kv.Value).ToArray()) + "}"}}}";
+                   $"properties={{{String.Join(",", Properties.Select(kv => kv.Key + "=" + kv.Value).ToArray())}}}";
         }
     }
 }
