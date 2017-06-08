@@ -22,13 +22,10 @@ namespace AppmetrCS
         private readonly String _mobDeviceType;
         private readonly IBatchPersister _batchPersister;
         private readonly HttpRequestService _httpRequestService;
-
-        private Boolean _stopped;
         private readonly List<AppMetrAction> _actionList = new List<AppMetrAction>();
-
+        
         private readonly Object _flushLock = new Object();
         private readonly Object _uploadLock = new Object();
-
         private readonly AppMetrTimer _flushTimer;
         private readonly AppMetrTimer _uploadTimer;
 
@@ -57,11 +54,6 @@ namespace AppmetrCS
 
         public void Track(AppMetrAction action)
         {
-            if (_stopped)
-            {
-                throw new Exception("Trying to track after stop!");
-            }
-
             try
             {
                 var currentEventSize = action.CalcApproximateSize();
@@ -88,6 +80,8 @@ namespace AppmetrCS
         
         public void Start()
         {
+            Log.Info("Start appmetr");
+            
             new Thread(_flushTimer.Start).Start();
             new Thread(_uploadTimer.Start).Start();
         }
@@ -95,8 +89,6 @@ namespace AppmetrCS
         public void Stop()
         {
             Log.Info("Stop appmetr");
-
-            _stopped = true;
 
             lock (_uploadLock)
             {
