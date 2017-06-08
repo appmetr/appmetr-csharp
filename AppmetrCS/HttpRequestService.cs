@@ -94,7 +94,9 @@ namespace AppmetrCS
             var mandatoryParams = new Dictionary<String, String>
             {
                 {"method", ServerMethodName},
-                {"timestamp", Convert.ToString(Utils.GetNowUnixTimestamp())}
+                {"timestamp", Convert.ToString(Utils.GetNowUnixTimestamp())},
+                {"mobLibVer", GetType().Assembly.GetName().Version.ToString()},
+                {"mobOSVer", $"{Environment.OSVersion.Platform} {Environment.OSVersion.Version}"}
             };
 
             return mandatoryParams.Concat(extraParams).ToDictionary(p => p.Key, p => p.Value);
