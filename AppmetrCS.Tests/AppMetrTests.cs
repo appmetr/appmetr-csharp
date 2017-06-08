@@ -143,15 +143,11 @@ namespace AppmetrCS.Tests
                     {"double", 3.99}
                 }
             };
-            var trackSession = new TrackSession
-            {
-                Properties = new Dictionary<String, Object>
-                {
-                    {"string", "my session"},
-                    {"int", 44},
-                    {"double", 4.99}
-                }
-            };
+            var trackSession = new TrackSession(4);
+            trackSession.Properties.Add("string", "my session");
+            trackSession.Properties.Add("int", 44);
+            trackSession.Properties.Add("double", 4.99);
+            
             var trackPayment = new TrackPayment("order 1", "transaction 1", "processor 1", "USD", "100", "RUB", "600")
             {
                 Properties = new Dictionary<String, Object>

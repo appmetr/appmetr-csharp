@@ -7,9 +7,16 @@ namespace AppmetrCS.Actions
     public class TrackSession : AppMetrAction
     {
         private const String ACTION = "trackSession";
+        
+        public const String Duration = "$duration";
 
-        public TrackSession() : base(ACTION)
+        public TrackSession()
         {
+        }
+
+        public TrackSession(Int64 duration) : base(ACTION)
+        {
+            Properties.Add(Duration, duration);
         }
     }
 }
