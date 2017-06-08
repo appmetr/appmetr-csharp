@@ -15,7 +15,7 @@
         [DataMember(Name = "event")]
         public String Event { get; set; }
 
-        protected TrackEvent()
+        protected TrackEvent() : base(ACTION)
         {
         }
 

@@ -10,7 +10,7 @@ namespace AppmetrCS.Actions
         
         public const String Duration = "$duration";
 
-        public TrackSession()
+        protected TrackSession() : base(ACTION)
         {
         }
 

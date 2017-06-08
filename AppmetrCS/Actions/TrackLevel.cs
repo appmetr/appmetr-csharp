@@ -15,7 +15,7 @@
         [DataMember(Name = "level")]
         public Int32 Level { get; set; }
 
-        protected TrackLevel()
+        protected TrackLevel() : base(ACTION)
         {
         }
 

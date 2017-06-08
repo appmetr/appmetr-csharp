@@ -39,7 +39,7 @@
         [DataMember(Name = "appCurrencyAmount")]
         public String AppCurrencyAmount { get; set; }
         
-        protected TrackPayment()
+        protected TrackPayment() : base(ACTION)
         {
         }
 

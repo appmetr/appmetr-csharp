@@ -147,7 +147,6 @@ namespace AppmetrCS.Tests
             trackSession.Properties.Add("string", "my session");
             trackSession.Properties.Add("int", 44);
             trackSession.Properties.Add("double", 4.99);
-            
             var trackPayment = new TrackPayment("order 1", "transaction 1", "processor 1", "USD", "100", "RUB", "600")
             {
                 Properties = new Dictionary<String, Object>
@@ -157,6 +156,15 @@ namespace AppmetrCS.Tests
                     {"double", 5.99}
                 }
             };
+            var trackIdentify = new TrackIdentify("tester")
+            {
+                Properties = new Dictionary<String, Object>
+                {
+                    {"string", "my identifier"},
+                    {"int", 66},
+                    {"double", 6.99}
+                }
+            };
 
             var actions = new List<AppMetrAction>();
             actions.Add(trackEvent);
@@ -164,6 +172,7 @@ namespace AppmetrCS.Tests
             actions.Add(trackLevel);
             actions.Add(trackSession);
             actions.Add(trackPayment);
+            actions.Add(trackIdentify);
 
             var batch = new Batch(1, actions);
             return batch;
