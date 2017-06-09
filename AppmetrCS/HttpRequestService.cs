@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using System.Linq;
 using AppmetrCS.Serializations;
-using Newtonsoft.Json;
 
 namespace AppmetrCS
 {
@@ -13,7 +12,6 @@ namespace AppmetrCS
     using System.Net;
     using System.Runtime.Serialization;
     using System.Text;
-    using System.Web;
     using Persister;
 
     #endregion
@@ -128,7 +126,7 @@ namespace AppmetrCS
                         queryBuilder.Append("&");
                     }
 
-                    queryBuilder.Append(param.Key).Append("=").Append(HttpUtility.UrlEncode(param.Value, Encoding.UTF8));
+                    queryBuilder.Append(param.Key).Append("=").Append(Uri.EscapeDataString(param.Value));
                 }
             }
             return queryBuilder.ToString();
