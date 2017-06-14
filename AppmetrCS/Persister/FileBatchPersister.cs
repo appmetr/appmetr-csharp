@@ -26,8 +26,8 @@ namespace AppmetrCS.Persister
         private readonly String _batchIdFile;
         private readonly IJsonSerializer _serializer;
 
-        private Queue<Int32> _fileIds;
-        private Int32 _lastBatchId;
+        private Queue<Int64> _fileIds;
+        private Int64 _lastBatchId;
 
         public FileBatchPersister(String filePath) : this(filePath, NewtonsoftSerializerTyped.Instance)
         {
@@ -172,25 +172,25 @@ namespace AppmetrCS.Persister
             var files = Directory.GetFiles(_filePath, $"{BatchFilePrefix}*");
             
             var ids = files
-                .Select(file => Convert.ToInt32(Path.GetFileName(file).Substring(BatchFilePrefix.Length)))
+                .Select(file => Convert.ToInt64(Path.GetFileName(file).Substring(BatchFilePrefix.Length)))
                 .OrderBy(_ => _)
                 .ToList();
 
-            var batchId = Int32.MinValue;
+            var batchId = Int64.MinValue;
             try
             {
                 String batchStr;
                 if (File.Exists(_batchIdFile) && (batchStr = File.ReadAllText(_batchIdFile)).Length > 0)
                 {
-                    batchId = Convert.ToInt32(batchStr);
+                    batchId = Convert.ToInt64(batchStr);
                 }
             } catch (Exception e) {
                 Log.Error("Error loading reading last batch id. Counting files", e);
             }
 
-			if (batchId == Int32.MinValue)
+			if (batchId == Int64.MinValue)
 			{
-			    _lastBatchId = ids.Count > 0 ? ids[ids.Count - 1] : 0;
+			    _lastBatchId = ids.Count > 0 ? ids[ids.Count - 1] : 0L;
 			}
 			else
 			{
@@ -208,7 +208,7 @@ namespace AppmetrCS.Persister
                 }
             }
 
-            _fileIds = new Queue<Int32>(ids);
+            _fileIds = new Queue<Int64>(ids);
         }
 
         private void UpdateLastBatchId()
@@ -217,7 +217,7 @@ namespace AppmetrCS.Persister
             File.WriteAllText(_batchIdFile, Convert.ToString(_lastBatchId));
         }
 
-        private static String GetBatchFileName(Int32 batchId)
+        private static String GetBatchFileName(Int64 batchId)
         {
             return $"{BatchFilePrefix}{batchId:D11}";
         }

@@ -20,7 +20,7 @@ namespace AppmetrCS.Persister
     public class Batch
     {
         [DataMember(Name = "batchId")]
-        public readonly Int32 BatchId;
+        public readonly Int64 BatchId;
 
         [DataMember(Name = "batch")]
         public readonly List<AppMetrAction> Actions;
@@ -29,7 +29,7 @@ namespace AppmetrCS.Persister
         {
         }
 
-        public Batch(Int32 batchId, IEnumerable<AppMetrAction> actionList)
+        public Batch(Int64 batchId, IEnumerable<AppMetrAction> actionList)
         {
             BatchId = batchId;
             Actions = new List<AppMetrAction>();
