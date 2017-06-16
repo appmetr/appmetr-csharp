@@ -1,4 +1,6 @@
-﻿namespace AppmetrCS.Persister
+﻿using System.Linq;
+
+namespace AppmetrCS.Persister
 {
     #region using directives
 
@@ -11,46 +13,36 @@
 
     [DataContract]
     [KnownType(typeof(AttachProperties))]
-    [KnownType(typeof(Event))]
-    [KnownType(typeof(Level))]
-    [KnownType(typeof(Payment))]
+    [KnownType(typeof(TrackEvent))]
+    [KnownType(typeof(TrackLevel))]
+    [KnownType(typeof(TrackPayment))]
     [KnownType(typeof(TrackSession))]
     public class Batch
     {
         [DataMember(Name = "batchId")]
-        private readonly int _batchId;
+        public readonly Int64 BatchId;
 
         [DataMember(Name = "batch")]
-        private readonly List<AppMetrAction> _batch;
-
-        [DataMember(Name = "serverId")]
-        private readonly String _serverId;
+        public readonly List<AppMetrAction> Actions;
 
         private Batch()
         {
-            
         }
 
-        public Batch(String serverId, int batchId, IEnumerable<AppMetrAction> actionList)
+        public Batch(Int64 batchId, IEnumerable<AppMetrAction> actionList)
         {
-            _serverId = serverId;
-            _batchId = batchId;
-            _batch = new List<AppMetrAction>(actionList);
+            BatchId = batchId;
+            Actions = new List<AppMetrAction>();
+
+            if (actionList != null)
+            {
+                Actions.AddRange(actionList);
+            }
         }
 
-        public int GetBatchId()
+        public override String ToString()
         {
-            return _batchId;
-        }
-
-        public List<AppMetrAction> GetBatch()
-        {
-            return _batch;
-        }
-
-        public override string ToString()
-        {
-            return String.Format("Batch{{events={0}, batchId={1}, serverId={2}}", _batch.Count, _batchId, _serverId);
+            return $"Batch{{batchId={BatchId}, events={String.Join(",", Actions.Select(v => v.ToString()).ToArray())}}}";
         }
     }
 }

@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AppmetrCS.Actions
 {
@@ -11,9 +7,16 @@ namespace AppmetrCS.Actions
     public class TrackSession : AppMetrAction
     {
         private const String ACTION = "trackSession";
+        
+        public const String Duration = "$duration";
 
         public TrackSession() : base(ACTION)
         {
+        }
+
+        public TrackSession(Int64 duration) : base(ACTION)
+        {
+            Properties.Add(Duration, duration);
         }
     }
 }
