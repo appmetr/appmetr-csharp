@@ -16,12 +16,31 @@ namespace AppmetrCS
     
     internal class DummyLog : ILog
     {
-        public Boolean IsDebugEnabled => false;
-        public Boolean IsInfoEnabled => false;
-        public Boolean IsWarnEnabled => false;
-        public Boolean IsErrorEnabled => false;
-        public Boolean IsFatalEnabled => false;
-        
+        public Boolean IsDebugEnabled
+        {
+            get { return false; }
+        }
+
+        public Boolean IsInfoEnabled
+        {
+            get { return false; }
+        }
+
+        public Boolean IsWarnEnabled
+        {
+            get { return false; }
+        }
+
+        public Boolean IsErrorEnabled
+        {
+            get { return false; }
+        }
+
+        public Boolean IsFatalEnabled
+        {
+            get { return false; }
+        }
+
         public void Debug(Object message)
         {
         }

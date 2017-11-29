@@ -36,26 +36,26 @@ namespace AppmetrCS.Actions
 
         public String Action
         {
-            get => _action;
-            set => _action = value;
+            get { return _action; }
+            set { _action = value; }
         }
 
         public Int64 Timestamp
         {
-            get => _timestamp;
-            set => _timestamp = value;
+            get { return _timestamp; }
+            set { _timestamp = value; }
         }
 
         public IDictionary<String, Object> Properties
         {
-            get => _properties;
-            set => _properties = value;
+            get { return _properties; }
+            set { _properties = value; }
         }
 
         public String UserId
         {
-            get => _userId;
-            set => _userId = value;
+            get { return _userId; }
+            set { _userId = value; }
         }
 
         //http://codeblog.jonskeet.uk/2011/04/05/of-memory-and-strings/
