@@ -24,10 +24,6 @@ namespace AppmetrCS
         private const String ServerMethodName = "server.track";
         private readonly IJsonSerializer _serializer;
 
-        public HttpRequestService() : this(NewtonsoftSerializer.Instance)
-        {
-        }
-
         public HttpRequestService(IJsonSerializer serializer)
         {
             _serializer = serializer;

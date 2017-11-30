@@ -36,8 +36,6 @@ namespace AppmetrCS
         private const Int32 FlushPeriod = MillisPerMinute/2;
         private const Int32 UploadPeriod = MillisPerMinute/2;
 
-        public AppMetr(String url, String token, String mobUuid, String filePath) : this(url, token, mobUuid, batchPersister: new FileBatchPersister(filePath)) {}
-
         public AppMetr(String url, String token, String mobUuid, String mobDeviceType = "Facebook", IBatchPersister batchPersister = null, HttpRequestService httpRequestService = null)
         {
             Log.InfoFormat("Start Appmetr for token={0}, url={1}", token, url);
@@ -47,7 +45,7 @@ namespace AppmetrCS
             _mobUuid = mobUuid;
             _mobDeviceType = mobDeviceType;
             _batchPersister = batchPersister ?? new MemoryBatchPersister();
-            _httpRequestService = httpRequestService ?? new HttpRequestService();
+            _httpRequestService = httpRequestService;
             _flushTimer = new AppMetrTimer(FlushPeriod, Flush, "FlushJob");
             _uploadTimer = new AppMetrTimer(UploadPeriod, Upload, "UploadJob");
         }

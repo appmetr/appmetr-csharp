@@ -29,10 +29,6 @@ namespace AppmetrCS.Persister
         private Queue<Int64> _fileIds;
         private Int64 _lastBatchId;
 
-        public FileBatchPersister(String filePath) : this(filePath, NewtonsoftSerializerTyped.Instance)
-        {
-        }
-
         public FileBatchPersister(String filePath, IJsonSerializer serializer)
         {
             if (!Directory.Exists(filePath))
