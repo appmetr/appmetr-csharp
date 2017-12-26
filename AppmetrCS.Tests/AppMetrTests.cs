@@ -66,7 +66,7 @@ namespace AppmetrCS.Tests
         public void TestFilePersister ()
         {
             var filePath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-            var persister = new FileBatchPersister(filePath);
+            var persister = new FileBatchPersister(filePath, new NewtonsoftSerializerTyped());
 
             var actions = CreateBatch().Actions;
             persister.Persist(actions);
@@ -90,7 +90,7 @@ namespace AppmetrCS.Tests
                 Assert.Equal(expected.Action, actual.Action);
                 Assert.Equal(expected.UserId, actual.UserId);
                 Assert.Equal(expected.Timestamp, actual.Timestamp);
-               ValidateProperties(expected.Properties, actual.Properties);
+                ValidateProperties(expected.Properties, actual.Properties);
             }
         }
 
@@ -147,7 +147,7 @@ namespace AppmetrCS.Tests
             trackSession.Properties.Add("string", "my session");
             trackSession.Properties.Add("int", 44);
             trackSession.Properties.Add("double", 4.99);
-            var trackPayment = new TrackPayment("order 1", "transaction 1", "processor 1", "USD", "100", "RUB", "600")
+            var trackPayment = new TrackPayment("order 1", "transaction 1", "processor 1", "USD", "100", "RUB", "600", "appCurCode", "appCurAmount")
             {
                 Properties = new Dictionary<String, Object>
                 {

@@ -49,18 +49,6 @@
             String psUserSpentCurrencyCode,
             String psUserSpentCurrencyAmount,
             String psReceivedCurrencyCode,
-            String psReceivedCurrencyAmount)
-            : this(orderId, transactionId, processor, psUserSpentCurrencyCode, psUserSpentCurrencyAmount,
-                psReceivedCurrencyCode, psReceivedCurrencyAmount, null, null)
-        {
-        }
-
-        public TrackPayment(String orderId,
-            String transactionId,
-            String processor,
-            String psUserSpentCurrencyCode,
-            String psUserSpentCurrencyAmount,
-            String psReceivedCurrencyCode,
             String psReceivedCurrencyAmount,
             String appCurrencyCode,
             String appCurrencyAmount) : base(ACTION)
