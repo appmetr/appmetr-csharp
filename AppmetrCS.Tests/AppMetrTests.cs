@@ -147,7 +147,7 @@ namespace AppmetrCS.Tests
             trackSession.Properties.Add("string", "my session");
             trackSession.Properties.Add("int", 44);
             trackSession.Properties.Add("double", 4.99);
-            var trackPayment = new TrackPayment("order 1", "transaction 1", "processor 1", "USD", "100", "RUB", "600", "appCurCode", "appCurAmount")
+            var trackPayment = new TrackPayment("order 1", "transaction 1", "processor 1", "USD", "100", "RUB", "600", "appCurCode", "appCurAmount", "ru", true)
             {
                 Properties = new Dictionary<String, Object>
                 {
