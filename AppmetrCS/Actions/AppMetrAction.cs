@@ -1,4 +1,6 @@
-﻿namespace AppmetrCS.Actions
+﻿using System.Linq;
+
+namespace AppmetrCS.Actions
 {
     #region using directives
 
@@ -15,10 +17,10 @@
         private String _action;
 
         [DataMember(Name = "timestamp")]
-        private long _timestamp = Utils.GetNowUnixTimestamp();
+        private Int64 _timestamp = Utils.GetNowUnixTimestamp();
 
         [DataMember(Name = "properties")]
-        private IDictionary<String, Object> _properties = new Dictionary<string, object>();
+        private IDictionary<String, Object> _properties = new Dictionary<String, Object>();
 
         [DataMember(Name = "userId")]
         private String _userId;
@@ -27,54 +29,45 @@
         {
         }
 
-        protected AppMetrAction(string action)
+        protected AppMetrAction(String action)
         {
             _action = action;
         }
 
-        public long GetTimestamp()
+        public String Action
         {
-            return _timestamp;
+            get { return _action; }
+            set { _action = value; }
         }
 
-        public AppMetrAction SetTimestamp(long timestamp)
+        public Int64 Timestamp
         {
-            _timestamp = timestamp;
-            return this;
+            get { return _timestamp; }
+            set { _timestamp = value; }
         }
 
-        public IDictionary<String, Object> GetProperties()
+        public IDictionary<String, Object> Properties
         {
-            return _properties;
+            get { return _properties; }
+            set { _properties = value; }
         }
 
-        public AppMetrAction SetProperties(IDictionary<String, Object> properties)
+        public String UserId
         {
-            _properties = properties;
-            return this;
-        }
-
-        public String GetUserId()
-        {
-            return _userId;
-        }
-
-        public AppMetrAction SetUserId(String userId)
-        {
-            _userId = userId;
-            return this;
+            get { return _userId; }
+            set { _userId = value; }
         }
 
         //http://codeblog.jonskeet.uk/2011/04/05/of-memory-and-strings/
-        public virtual int CalcApproximateSize()
+        public virtual Int32 CalcApproximateSize()
         {
-            int size = 40 + (40 * _properties.Count); //40 - Map size and 40 - each entry overhead
+            var size = 40 + (40 * _properties.Count); //40 - Map size and 40 - each entry overhead
 
             size += GetStringLength(_action);
             size += GetStringLength(Convert.ToString(_timestamp));
             size += GetStringLength(_userId);
 
-            foreach (KeyValuePair<String, Object> pair in _properties) {
+            foreach (var pair in _properties) {
                 size += GetStringLength(pair.Key);
                 size += GetStringLength(pair.Value != null ? Convert.ToString(pair.Value) : null);   //toString because sending this object via json
             }
@@ -82,9 +75,15 @@
             return 8 + size + 8; //8 - object header
         }
 
-        protected int GetStringLength(String str)
+        protected Int32 GetStringLength(String str)
         {
-            return str == null ? 0 : str.Length * 2 + 26;    //24 - String object size, 16 - char[]
+            return str?.Length * 2 + 26 ?? 0;    //24 - String object size, 16 - char[]
+        }
+        
+        public override String ToString()
+        {
+            return $"{GetType().Name}{{action={Action}, timestamp={Timestamp}, userId={UserId}, " +
+                   $"properties={{{String.Join(",", Properties.Select(kv => kv.Key + "=" + kv.Value).ToArray())}}}";
         }
     }
 }

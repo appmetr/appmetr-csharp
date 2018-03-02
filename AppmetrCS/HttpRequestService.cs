@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Linq;
 using AppmetrCS.Serializations;
 
 namespace AppmetrCS
@@ -10,77 +11,58 @@ namespace AppmetrCS
     using System.IO.Compression;
     using System.Net;
     using System.Runtime.Serialization;
-    using System.Runtime.Serialization.Json;
     using System.Text;
-    using System.Web;
-    using log4net;
     using Persister;
 
     #endregion
 
-    internal class HttpRequestService
+    public class HttpRequestService
     {
-        private static readonly ILog Log = LogUtils.GetLogger(typeof (HttpRequestService));
+        private static readonly ILog Log = LogUtils.GetLogger(typeof(HttpRequestService));
 
-		private static readonly int READ_WRITE_TIMEOUT = 10 * 60 * 1000;
-		private static readonly int WHOLE_RQUEST_TIMEOUT = 12 * 60 * 1000;
-
-        private const string ServerMethodName = "server.trackS2S";
+        private const Int32 Timeout = 2 * 60 * 1000;
+        private const String ServerMethodName = "server.track";
         private readonly IJsonSerializer _serializer;
-
-        public HttpRequestService() : this(new JavaScriptJsonSerializer())
-        {
-        }
 
         public HttpRequestService(IJsonSerializer serializer)
         {
             _serializer = serializer;
         }
 
-        public bool SendRequest(string httpUrl, string token, Batch batch)
+        public Boolean SendRequest(String httpUrl, Batch batch, Dictionary<String, String> extraParams)
         {
-            var @params = new Dictionary<string, string>(3)
-            {
-                {"method", ServerMethodName},
-                {"token", token},
-                {"timestamp", Convert.ToString(Utils.GetNowUnixTimestamp())}
-            };
+            var @params = CreateRequestParemeters(extraParams);
 
-            byte[] deflatedBatch;
+            Byte[] deflatedBatch;
             var serializedBatch = Utils.SerializeBatch(batch, _serializer);
             using (var memoryStream = new MemoryStream())
             {
-                using (var deflateStream = new DeflateStream(memoryStream, CompressionLevel.Optimal))
+                using (var deflateStream = new DeflateStream(memoryStream, CompressionMode.Compress))
                 {
                     Utils.WriteData(deflateStream, serializedBatch);
                 }
                 deflatedBatch = memoryStream.ToArray();
             }
             
-            var request = (HttpWebRequest)WebRequest.Create(httpUrl + "?" + MakeQueryString(@params));
-            request.Method = "POST";
-            request.ContentType = "application/octet-stream";
-            request.ContentLength = deflatedBatch.Length;
-			request.Timeout = WHOLE_RQUEST_TIMEOUT;
-			request.ReadWriteTimeout = READ_WRITE_TIMEOUT;
+            var request = CreateWebRequest(httpUrl, deflatedBatch.Length, @params);
 
-            Log.DebugFormat("Getting request (contentLength = {0}) stream for batch with id={1}", deflatedBatch.Length, batch.GetBatchId());
+            Log.DebugFormat("Getting request (contentLength = {0}) stream for batch with id={1}", deflatedBatch.Length, batch.BatchId);
             using (var stream = request.GetRequestStream())
             {
-                Log.DebugFormat("Request stream created for batch with id={0}", batch.GetBatchId());
-                Log.DebugFormat("Write bytes to stream. Batch id={0}", batch.GetBatchId());
+                Log.DebugFormat("Request stream created for batch with id={0}", batch.BatchId);
+                Log.DebugFormat("Write bytes to stream. Batch id={0}", batch.BatchId);
                 Utils.WriteData(stream, deflatedBatch);
             }
 
             try
             {
-                Log.DebugFormat("Getting response after sending batch with id={0}", batch.GetBatchId());
+                Log.DebugFormat("Getting response after sending batch with id={0}", batch.BatchId);
                 using (var response = (HttpWebResponse) request.GetResponse())
                 {
-                    Log.DebugFormat("Response received for batch with id={0}", batch.GetBatchId());
+                    Log.DebugFormat("Response received for batch with id={0}", batch.BatchId);
 
-                    var serializer = new DataContractJsonSerializer(typeof (JsonResponseWrapper));
-                    var jsonResponse = (JsonResponseWrapper) serializer.ReadObject(response.GetResponseStream());
+                    var streamReader = new StreamReader(response.GetResponseStream());
+                    var jsonResponse = _serializer.Deserialize<JsonResponseWrapper>(streamReader.ReadToEnd());
 
                     if (jsonResponse.Error != null)
                     {
@@ -101,12 +83,36 @@ namespace AppmetrCS
             return false;
         }
 
+        protected Dictionary<String, String> CreateRequestParemeters(Dictionary<String, String> extraParams)
+        {
+            var mandatoryParams = new Dictionary<String, String>
+            {
+                {"method", ServerMethodName},
+                {"timestamp", Convert.ToString(Utils.GetNowUnixTimestamp())},
+                {"mobLibVer", GetType().Assembly.GetName().Version.ToString()},
+                {"mobOSVer", $"{Environment.OSVersion.Platform} {Environment.OSVersion.Version}"}
+            };
+
+            return mandatoryParams.Concat(extraParams).ToDictionary(p => p.Key, p => p.Value);
+        }
+
+        protected HttpWebRequest CreateWebRequest(String url, Int64 contentLenght, Dictionary<String, String> @params)
+        {
+            var request = (HttpWebRequest) WebRequest.Create(url + "?" + MakeQueryString(@params));
+            request.Method = "POST";
+            request.ContentType = "application/octet-stream";
+            request.ContentLength = contentLenght;
+            request.Timeout = Timeout;
+            request.ReadWriteTimeout = Timeout;
+            return request;
+        }
+        
         private static String MakeQueryString(Dictionary<String, String> @params)
         {
-            StringBuilder queryBuilder = new StringBuilder();
+            var queryBuilder = new StringBuilder();
 
-            int paramCount = 0;
-            foreach (KeyValuePair<string, string> param in @params)
+            var paramCount = 0;
+            foreach (var param in @params)
             {
                 if (param.Value != null)
                 {
@@ -116,7 +122,7 @@ namespace AppmetrCS
                         queryBuilder.Append("&");
                     }
 
-                    queryBuilder.Append(param.Key).Append("=").Append(HttpUtility.UrlEncode(param.Value, Encoding.UTF8));
+                    queryBuilder.Append(param.Key).Append("=").Append(Uri.EscapeDataString(param.Value));
                 }
             }
             return queryBuilder.ToString();
@@ -130,17 +136,32 @@ namespace AppmetrCS
     {
         [DataMember(Name = "error")] public ErrorWrapper Error;
         [DataMember(Name = "response")] public ResponseWrapper Response;
+
+        public override String ToString()
+        {
+            return $"{nameof(Error)}: {Error}, {nameof(Response)}: {Response}";
+        }
     }
 
     [DataContract]
     internal class ErrorWrapper
     {
         [DataMember(Name = "message", IsRequired = true)] public String Message;
+
+        public override String ToString()
+        {
+            return $"{nameof(Message)}: {Message}";
+        }
     }
 
     [DataContract]
     internal class ResponseWrapper
     {
         [DataMember(Name = "status", IsRequired = true)] public String Status;
+
+        public override String ToString()
+        {
+            return $"{nameof(Status)}: {Status}";
+        }
     }
 }

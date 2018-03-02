@@ -1,9 +1,11 @@
-﻿namespace AppmetrCS.Serializations
+﻿using System;
+
+namespace AppmetrCS.Serializations
 {
     public interface IJsonSerializer
     {
-        string Serialize(object obj);
+        String Serialize(Object obj);
 
-        T Deserialize<T>(string json);
+        T Deserialize<T>(String json);
     }
 }

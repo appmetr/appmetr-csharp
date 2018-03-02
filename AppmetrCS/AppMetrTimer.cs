@@ -4,22 +4,21 @@
 
     using System;
     using System.Threading;
-    using log4net;
 
     #endregion
 
     public class AppMetrTimer
     {
-        private static readonly ILog _log = LogUtils.GetLogger(typeof (AppMetrTimer));
+        private static readonly ILog Log = LogUtils.GetLogger(typeof (AppMetrTimer));
 
-        private readonly int _period;
+        private readonly Int32 _period;
         private readonly Action _onTimer;
-        private readonly string _jobName;
+        private readonly String _jobName;
 
-        private readonly object _lock = new object();
-        private bool _run;
+        private readonly Object _lock = new Object();
+        private Boolean _run;
 
-        public AppMetrTimer(int period, Action onTimer, string jobName = "AppMetrTimer")
+        public AppMetrTimer(Int32 period, Action onTimer, String jobName = "AppMetrTimer")
         {
             _period = period;
             _onTimer = onTimer;
@@ -28,9 +27,9 @@
 
         public void Start()
         {
-            if (_log.IsInfoEnabled)
+            if (Log.IsInfoEnabled)
             {
-                _log.InfoFormat("Start {0} with period {1}", _jobName, _period);
+                Log.InfoFormat("Start {0} with period {1}", _jobName, _period);
             }
 
             _run = true;
@@ -42,17 +41,17 @@
                     {
                         Monitor.Wait(_lock, _period);
 
-                        _log.InfoFormat("{0} triggered", _jobName);
+                        Log.InfoFormat("{0} triggered", _jobName);
                         _onTimer.Invoke();
                     }
                     catch (ThreadInterruptedException)
                     {
-                        _log.WarnFormat("{0} interrupted", _jobName);
+                        Log.WarnFormat("{0} interrupted", _jobName);
                         _run = false;
                     }
                     catch (Exception e)
                     {
-                        _log.ErrorFormat("{0} unhandled exception:\r\n{1}", _jobName, e);
+                        Log.ErrorFormat("{0} unhandled exception:\r\n{1}", _jobName, e);
                     }
                 }
             }
@@ -60,22 +59,21 @@
 
         public void Trigger()
         {
-            bool isTaken = false;
-            Monitor.Enter(_lock, ref isTaken);
+            Monitor.Enter(_lock);
             try
             {
                 Monitor.Pulse(_lock);
             }
             finally
             {
-                if (isTaken) Monitor.Exit(_lock);
+                Monitor.Exit(_lock);
             }
             
         }
 
         public void Stop()
         {
-            _log.InfoFormat("{0} stop triggered", _jobName);
+            Log.InfoFormat("{0} stop triggered", _jobName);
             _run = false;
             Thread.CurrentThread.Interrupt();
         }
