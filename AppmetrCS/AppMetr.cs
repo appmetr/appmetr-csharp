@@ -19,6 +19,7 @@ namespace AppmetrCS
         private readonly String _url;
         private readonly String _token;
         private readonly String _mobUuid;
+        private readonly String _platform;
         private readonly String _mobDeviceType;
         private readonly IBatchPersister _batchPersister;
         private readonly HttpRequestService _httpRequestService;
@@ -36,13 +37,14 @@ namespace AppmetrCS
         private const Int32 FlushPeriod = MillisPerMinute/2;
         private const Int32 UploadPeriod = MillisPerMinute/2;
 
-        public AppMetr(String url, String token, String mobUuid, String mobDeviceType = "Facebook", IBatchPersister batchPersister = null, HttpRequestService httpRequestService = null)
+        public AppMetr(String url, String token, String mobUuid, String platform, String mobDeviceType = "win", IBatchPersister batchPersister = null, HttpRequestService httpRequestService = null)
         {
             Log.InfoFormat("Start Appmetr for token={0}, url={1}", token, url);
 
             _token = token;
             _url = url;
             _mobUuid = mobUuid;
+            _platform = platform;
             _mobDeviceType = mobDeviceType;
             _batchPersister = batchPersister ?? new MemoryBatchPersister();
             _httpRequestService = httpRequestService;
@@ -146,6 +148,7 @@ namespace AppmetrCS
                     {
                         {"token", _token},
                         {"mobUuid", _mobUuid},
+                        {"platform", _platform},
                         {"mobDeviceType", _mobDeviceType}
                     }))
                     {
