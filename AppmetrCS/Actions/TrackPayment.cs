@@ -38,12 +38,19 @@
 
         [DataMember(Name = "appCurrencyAmount")]
         public String AppCurrencyAmount { get; set; }
-        
+
+        [DataMember(Name = "psUserStoreCountryCode")]
+        public String PsUserStoreCountryCode { get; set; }
+
+        [DataMember(Name = "isSandbox")]
+        public bool? IsSandbox { get; set; }
+
         protected TrackPayment() : base(ACTION)
         {
         }
 
-        public TrackPayment(String orderId,
+        public TrackPayment(
+            String orderId,
             String transactionId,
             String processor,
             String psUserSpentCurrencyCode,
@@ -51,7 +58,10 @@
             String psReceivedCurrencyCode,
             String psReceivedCurrencyAmount,
             String appCurrencyCode,
-            String appCurrencyAmount) : base(ACTION)
+            String appCurrencyAmount,
+            String psUserStoreCountryCode = null,
+            bool? isSandbox = null
+            ) : this()
         {
             OrderId = orderId;
             TransactionId = transactionId;
@@ -62,6 +72,8 @@
             PsReceivedCurrencyAmount = psReceivedCurrencyAmount;
             AppCurrencyCode = appCurrencyCode;
             AppCurrencyAmount = appCurrencyAmount;
+            PsUserStoreCountryCode = psUserStoreCountryCode;
+            IsSandbox = isSandbox;
         }
 
 
@@ -76,7 +88,8 @@
                    + GetStringLength(PsReceivedCurrencyCode)
                    + GetStringLength(PsReceivedCurrencyAmount)
                    + GetStringLength(AppCurrencyCode)
-                   + GetStringLength(AppCurrencyAmount);
+                   + GetStringLength(AppCurrencyAmount)
+                   + GetStringLength(PsUserStoreCountryCode);
         }
                 
         public override String ToString()
@@ -90,7 +103,9 @@
                    $"PsReceivedCurrencyCode: {PsReceivedCurrencyCode}, " +
                    $"PsReceivedCurrencyAmount: {PsReceivedCurrencyAmount}, " +
                    $"AppCurrencyCode: {AppCurrencyCode}, " +
-                   $"AppCurrencyAmount: {AppCurrencyAmount}";
+                   $"AppCurrencyAmount: {AppCurrencyAmount}, " +
+                   $"PsUserStoreCountryCode: {PsUserStoreCountryCode}, " +
+                   $"IsSandbox: {IsSandbox}";
         }
     }
 }
