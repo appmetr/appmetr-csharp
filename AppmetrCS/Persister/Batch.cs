@@ -17,6 +17,8 @@ namespace AppmetrCS.Persister
     [KnownType(typeof(TrackLevel))]
     [KnownType(typeof(TrackPayment))]
     [KnownType(typeof(TrackSession))]
+    [KnownType(typeof(TrackIdentify))]
+    [KnownType(typeof(TrackState))]
     public class Batch
     {
         [DataMember(Name = "batchId")]

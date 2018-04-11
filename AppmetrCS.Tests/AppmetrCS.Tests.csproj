@@ -69,6 +69,7 @@
   <ItemGroup>
     <Compile Include="AppMetrTests.cs" />
     <Compile Include="AppMetrTimerTests.cs" />
+    <Compile Include="Persister\MemoryBatchPersister.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Serializations\NewtonsoftSerializer.cs" />
     <Compile Include="Serializations\NewtonsoftSerializerTyped.cs" />

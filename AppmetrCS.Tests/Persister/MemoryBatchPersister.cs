@@ -36,5 +36,10 @@
                 _batchQueue.Dequeue();
             }
         }
+
+        public Int64 BatchId()
+        {
+            return _batchId;
+        }
     }
 }
