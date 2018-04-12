@@ -217,5 +217,10 @@ namespace AppmetrCS.Persister
         {
             return $"{BatchFilePrefix}{batchId:D11}";
         }
+
+        public Int64 BatchId()
+        {
+            return _lastBatchId;
+        }
     }
 }

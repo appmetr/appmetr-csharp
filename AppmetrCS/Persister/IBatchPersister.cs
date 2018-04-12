@@ -21,5 +21,7 @@
         /// Remove oldest batch from storage.
         /// </summary>
         void Remove();
+
+        Int64 BatchId();
     }
 }

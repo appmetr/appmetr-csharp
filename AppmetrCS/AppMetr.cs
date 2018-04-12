@@ -46,7 +46,7 @@ namespace AppmetrCS
             _mobUuid = mobUuid;
             _platform = platform;
             _mobDeviceType = mobDeviceType;
-            _batchPersister = batchPersister ?? new MemoryBatchPersister();
+            _batchPersister = batchPersister;
             _httpRequestService = httpRequestService;
             _flushTimer = new AppMetrTimer(FlushPeriod, Flush, "FlushJob");
             _uploadTimer = new AppMetrTimer(UploadPeriod, Upload, "UploadJob");
@@ -64,7 +64,7 @@ namespace AppmetrCS
                     _eventSize += currentEventSize;
                     _actionList.Add(action);
 
-                    flushNeeded = _eventSize >= MaxEventsSize;
+                    flushNeeded = action is TrackIdentify || (action is TrackSession && _batchPersister.BatchId() == 0) || _eventSize >= MaxEventsSize;
                 }
 
                 if (flushNeeded)
