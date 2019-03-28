@@ -27,8 +27,7 @@ namespace AppmetrCS
         
         private readonly Object _flushLock = new Object();
         private readonly Object _uploadLock = new Object();
-        private readonly AppMetrTimer _flushTimer;
-        private readonly AppMetrTimer _uploadTimer;
+         private readonly AppMetrTimer _uploadTimer;
 
         private Int32 _eventSize;
         private const Int32 MaxEventsSize = 1024*500*20;//2 MB
@@ -48,7 +47,6 @@ namespace AppmetrCS
             _mobDeviceType = mobDeviceType;
             _batchPersister = batchPersister;
             _httpRequestService = httpRequestService;
-            _flushTimer = new AppMetrTimer(FlushPeriod, Flush, "FlushJob");
             _uploadTimer = new AppMetrTimer(UploadPeriod, Upload, "UploadJob");
         }
 
@@ -58,18 +56,15 @@ namespace AppmetrCS
             {
                 var currentEventSize = action.CalcApproximateSize();
 
-                Boolean flushNeeded;
-                lock (_actionList)
+                 lock (_actionList)
                 {
                     _eventSize += currentEventSize;
                     _actionList.Add(action);
 
-                    flushNeeded = action is TrackIdentify || (action is TrackSession && _batchPersister.BatchId() == 0) || _eventSize >= MaxEventsSize;
-                }
-
-                if (flushNeeded)
-                {
-                    _flushTimer.Trigger();
+                    if (FlushNeeded(action))
+                    {
+                        Flush();
+                    }
                 }
             }
             catch (Exception e)
@@ -77,13 +72,17 @@ namespace AppmetrCS
                 Log.Error("Track failed", e);
             }
         }
+
+        protected Boolean FlushNeeded(AppMetrAction action)
+        {
+            return action is TrackIdentify || (action is TrackSession && _batchPersister.BatchId() == 0) || _eventSize >= MaxEventsSize;
+        }
         
         public void Start()
         {
             Log.Info("Start appmetr");
             
-            new Thread(_flushTimer.Start).Start();
-            new Thread(_uploadTimer.Start).Start();
+             new Thread(_uploadTimer.Start).Start();
         }
 
         public void Stop()
@@ -93,11 +92,6 @@ namespace AppmetrCS
             lock (_uploadLock)
             {
                 _uploadTimer.Stop();
-            }
-
-            lock (_flushLock)
-            {
-                _flushTimer.Stop();
             }
 
             Flush();
