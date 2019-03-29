@@ -27,10 +27,10 @@ namespace AppmetrCS
         
         private readonly Object _flushLock = new Object();
         private readonly Object _uploadLock = new Object();
-         private readonly AppMetrTimer _uploadTimer;
+        private readonly AppMetrTimer _uploadTimer;
 
         private Int32 _eventSize;
-        private const Int32 MaxEventsSize = 1024*500*20;//2 MB
+        private const Int32 MaxEventsSize = 2 * 1024 * 1024; //2 MB
 
         private const Int32 MillisPerMinute = 1000*60;
         private const Int32 FlushPeriod = MillisPerMinute/2;
