@@ -30,8 +30,9 @@ namespace AppmetrCS
         private readonly AppMetrTimer _uploadTimer;
 
         private Int32 _eventSize;
-        private const Int32 MaxEventsSize = 2 * 1024 * 1024; //2 MB
+        private DateTime _lastFlushTime;
 
+        private const Int32 MaxEventsSize = 2 * 1024 * 1024; //2 MB
         private const Int32 MillisPerMinute = 1000*60;
         private const Int32 FlushPeriod = MillisPerMinute/2;
         private const Int32 UploadPeriod = MillisPerMinute/2;
@@ -48,6 +49,7 @@ namespace AppmetrCS
             _batchPersister = batchPersister;
             _httpRequestService = httpRequestService;
             _uploadTimer = new AppMetrTimer(UploadPeriod, Upload, "UploadJob");
+            _lastFlushTime = DateTime.UtcNow;
         }
 
         public void Track(AppMetrAction action)
@@ -72,12 +74,30 @@ namespace AppmetrCS
                 Log.Error("Track failed", e);
             }
         }
+        public Boolean FlushIfNeeded()
+        {
+            lock (_actionList)
+            {
+                if (FlushNeeded())
+                {
+                    Flush();
+                    return true;
+                }
+            }
+
+            return false;
+        }
 
         protected Boolean FlushNeeded(AppMetrAction action)
         {
-            return action is TrackIdentify || (action is TrackSession && _batchPersister.BatchId() == 0) || _eventSize >= MaxEventsSize;
+            return action is TrackIdentify || (action is TrackSession && _batchPersister.BatchId() == 0) || FlushNeeded();
         }
-        
+
+        protected Boolean FlushNeeded()
+        {
+            return _eventSize >= MaxEventsSize || (DateTime.UtcNow - _lastFlushTime).TotalMilliseconds > FlushPeriod;
+        }
+
         public void Start()
         {
             Log.Info("Start appmetr");
@@ -120,6 +140,8 @@ namespace AppmetrCS
                 {
                     Log.Info("Nothing to flush");
                 }
+
+                _lastFlushTime = DateTime.UtcNow;
             }
         }
 
