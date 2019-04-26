@@ -19,6 +19,10 @@ namespace AppmetrCS.Actions
         [DataMember(Name = "timestamp")]
         private Int64 _timestamp = Utils.GetNowUnixTimestamp();
 
+        //https://docs.google.com/document/d/1rDBdmS80-csEd8Lj_r6cGtPV40yqV4zanSK4gkGlJ8U/edit?pli=1
+        [DataMember(Name = "$userTime")]
+        private Int64? _userTime;
+
         [DataMember(Name = "properties")]
         private IDictionary<String, Object> _properties = new Dictionary<String, Object>();
 
@@ -36,14 +40,14 @@ namespace AppmetrCS.Actions
 
         public String Action
         {
-            get { return _action; }
+            get { return _action; } 
             set { _action = value; }
         }
 
         public Int64 Timestamp
         {
-            get { return _timestamp; }
-            set { _timestamp = value; }
+            get { return _userTime ?? _timestamp; }
+            set { _userTime = value; }
         }
 
         public IDictionary<String, Object> Properties
