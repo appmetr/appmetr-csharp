@@ -19,7 +19,7 @@ namespace AppmetrCS.Actions
         [DataMember(Name = "timestamp")]
         private Int64 _timestamp = Utils.GetNowUnixTimestamp();
 
-        [DataMember(Name = "$userTime")]
+        [DataMember(Name = "userTime")]
         private Int64? _userTime;
 
         [DataMember(Name = "properties")]
