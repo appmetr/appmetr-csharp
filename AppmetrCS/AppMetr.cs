@@ -29,6 +29,7 @@ namespace AppmetrCS
         private readonly Object _uploadLock = new Object();
         private readonly AppMetrTimer _flushTimer;
         private readonly AppMetrTimer _uploadTimer;
+        private readonly String _deviceKey;
 
         private Int32 _eventSize;
         private const Int32 MaxEventsSize = 1024*500*20;//2 MB
@@ -50,6 +51,13 @@ namespace AppmetrCS
             _httpRequestService = httpRequestService;
             _flushTimer = new AppMetrTimer(FlushPeriod, Flush, "FlushJob");
             _uploadTimer = new AppMetrTimer(UploadPeriod, Upload, "UploadJob");
+
+            _deviceKey = Utils.MakeQueryString(new Dictionary<string, string>
+            {
+                {"mobUuid", mobUuid},
+                {"platform", platform},
+                {"mobDeviceType", mobDeviceType}
+            });
         }
 
         public void Track(AppMetrAction action)
@@ -144,7 +152,7 @@ namespace AppmetrCS
 
                     Log.DebugFormat("Starting send batch with id={0}", batch.BatchId);
                     
-                    if (_httpRequestService.SendRequest(_url, batch,  new Dictionary<String, String>
+                    if (_httpRequestService.SendRequest(_url, batch, new Dictionary<String, String>
                     {
                         {"token", _token},
                         {"mobUuid", _mobUuid},
@@ -168,6 +176,11 @@ namespace AppmetrCS
 
                 Log.DebugFormat("{0} from {1} batches uploaded", uploadedBatchCounter, allBatchCounter);
             }
+        }
+
+        public String GetDeviceKey()
+        {
+            return _deviceKey;
         }
     }
 }

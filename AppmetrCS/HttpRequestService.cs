@@ -98,7 +98,7 @@ namespace AppmetrCS
 
         protected HttpWebRequest CreateWebRequest(String url, Int64 contentLenght, Dictionary<String, String> @params)
         {
-            var request = (HttpWebRequest) WebRequest.Create(url + "?" + MakeQueryString(@params));
+            var request = (HttpWebRequest) WebRequest.Create(url + "?" + Utils.MakeQueryString(@params));
             request.Method = "POST";
             request.ContentType = "application/octet-stream";
             request.ContentLength = contentLenght;
@@ -107,28 +107,6 @@ namespace AppmetrCS
             return request;
         }
         
-        private static String MakeQueryString(Dictionary<String, String> @params)
-        {
-            var queryBuilder = new StringBuilder();
-
-            var paramCount = 0;
-            foreach (var param in @params)
-            {
-                if (param.Value != null)
-                {
-                    paramCount++;
-                    if (paramCount > 1)
-                    {
-                        queryBuilder.Append("&");
-                    }
-
-                    queryBuilder.Append(param.Key).Append("=").Append(Uri.EscapeDataString(param.Value));
-                }
-            }
-            return queryBuilder.ToString();
-        }
-    }
-
     [DataContract]
     [KnownType(typeof (ErrorWrapper))]
     [KnownType(typeof (ResponseWrapper))]

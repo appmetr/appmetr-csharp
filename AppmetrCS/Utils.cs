@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using AppmetrCS.Persister;
@@ -60,5 +61,27 @@ namespace AppmetrCS
                 return false;
             }
         }
+
+        public static String MakeQueryString(Dictionary<String, String> @params)
+        {
+            var queryBuilder = new StringBuilder();
+
+            foreach (var param in @params)
+            {
+                if (param.Value != null)
+                {
+                    if (queryBuilder.Length > 0)
+                    {
+                        queryBuilder.Append("&");
+                    }
+
+                    queryBuilder.Append(param.Key).Append("=").Append(Uri.EscapeDataString(param.Value));
+                }
+            }
+
+            return queryBuilder.ToString();
+        }
     }
+
+}
 }
