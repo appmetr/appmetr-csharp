@@ -19,7 +19,6 @@ namespace AppmetrCS.Actions
         [DataMember(Name = "timestamp")]
         private Int64 _timestamp = Utils.GetNowUnixTimestamp();
 
-        //https://docs.google.com/document/d/1rDBdmS80-csEd8Lj_r6cGtPV40yqV4zanSK4gkGlJ8U/edit?pli=1
         [DataMember(Name = "$userTime")]
         private Int64? _userTime;
 
@@ -86,7 +85,7 @@ namespace AppmetrCS.Actions
         
         public override String ToString()
         {
-            return $"{GetType().Name}{{action={Action}, timestamp={Timestamp}, userId={UserId}, " +
+            return $"{GetType().Name}{{action={Action}, timestamp={_timestamp}, userTime={Timestamp}, userId={UserId}, " +
                    $"properties={{{String.Join(",", Properties.Select(kv => kv.Key + "=" + kv.Value).ToArray())}}}";
         }
     }
