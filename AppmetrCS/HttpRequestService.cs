@@ -106,7 +106,8 @@ namespace AppmetrCS
             request.ReadWriteTimeout = Timeout;
             return request;
         }
-        
+    }
+
     [DataContract]
     [KnownType(typeof (ErrorWrapper))]
     [KnownType(typeof (ResponseWrapper))]

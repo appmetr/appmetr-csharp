@@ -82,6 +82,4 @@ namespace AppmetrCS
             return queryBuilder.ToString();
         }
     }
-
-}
 }
