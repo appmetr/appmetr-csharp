@@ -19,6 +19,9 @@ namespace AppmetrCS.Actions
         [DataMember(Name = "timestamp")]
         private Int64 _timestamp = Utils.GetNowUnixTimestamp();
 
+        [DataMember(Name = "userTime")]
+        private Int64? _userTime;
+
         [DataMember(Name = "properties")]
         private IDictionary<String, Object> _properties = new Dictionary<String, Object>();
 
@@ -36,14 +39,14 @@ namespace AppmetrCS.Actions
 
         public String Action
         {
-            get { return _action; }
+            get { return _action; } 
             set { _action = value; }
         }
 
         public Int64 Timestamp
         {
-            get { return _timestamp; }
-            set { _timestamp = value; }
+            get { return _userTime ?? _timestamp; }
+            set { _userTime = value; }
         }
 
         public IDictionary<String, Object> Properties
@@ -82,7 +85,7 @@ namespace AppmetrCS.Actions
         
         public override String ToString()
         {
-            return $"{GetType().Name}{{action={Action}, timestamp={Timestamp}, userId={UserId}, " +
+            return $"{GetType().Name}{{action={Action}, timestamp={_timestamp}, userTime={Timestamp}, userId={UserId}, " +
                    $"properties={{{String.Join(",", Properties.Select(kv => kv.Key + "=" + kv.Value).ToArray())}}}";
         }
     }

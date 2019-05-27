@@ -78,6 +78,44 @@ namespace AppmetrCS.Tests
             persister.Remove();
         }
 
+        [Fact]
+        public void SerializePayment()
+        {
+            var events = new List<AppMetrAction>
+            {
+                new TrackPayment("order1", "trans1", "proc1", "USD", "123", "Ru", "10", "UK", "20", isSandbox: true)
+            };
+            var batch = new Batch(1, events);
+
+            var defaultSerializer = new NewtonsoftSerializer();
+
+            var json = defaultSerializer.Serialize(batch);
+
+            _output.WriteLine("Json: " + json);
+        }
+
+        [Fact]
+        public void SerializeUserTime()
+        {
+            var e = new TrackEvent("test")
+            {
+                Timestamp = 1
+            };
+            Assert.Equal(1, e.Timestamp);
+
+            var events = new List<AppMetrAction>
+            {
+                e
+            };
+            var batch = new Batch(1, events);
+
+            var defaultSerializer = new NewtonsoftSerializer();
+
+            var json = defaultSerializer.Serialize(batch);
+
+            _output.WriteLine("Json: " + json);
+        }
+
         private static void ValidateActions(List<AppMetrAction> expectedActions, List<AppMetrAction> actualActions)
         {
             Assert.Equal(expectedActions.Count, actualActions.Count);
