@@ -54,7 +54,8 @@ namespace AppmetrCS
 
             _deviceKey = Utils.MakeQueryString(new Dictionary<string, string>
             {
-                {"mobUuid", mobUuid},
+                {"token", _token.ToLower()},
+                {"mobUuid", Utils.GetHash(mobUuid)},
                 {"platform", platform},
                 {"mobDeviceType", mobDeviceType}
             });
