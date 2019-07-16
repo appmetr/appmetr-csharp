@@ -61,6 +61,7 @@
     <Compile Include="HttpRequestService.cs" />
     <Compile Include="ILog.cs" />
     <Compile Include="LogUtils.cs" />
+    <Compile Include="MurmurHash3.cs" />
     <Compile Include="Serializations\IJsonSerializer.cs" />
     <Compile Include="Persister\Batch.cs" />
     <Compile Include="Persister\FileBatchPersister.cs" />

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using AppmetrCS.Persister;
@@ -80,6 +81,21 @@ namespace AppmetrCS
             }
 
             return queryBuilder.ToString();
+        }
+
+        public static string GetHash(String data)
+        {
+            if (String.IsNullOrEmpty(data)) return data;
+            
+            byte[] result = new MurmurHash3().ComputeHash(Encoding.ASCII.GetBytes(data.ToLower(CultureInfo.InvariantCulture)));
+            StringBuilder sb = new StringBuilder(2 * result.Length);
+            char[] hexDigits = "0123456789abcdef".ToCharArray();
+            foreach (byte b in result)
+            {
+                sb.Append(hexDigits[(b >> 4) & 0xf]).Append(hexDigits[b & 0xf]);
+            }
+
+            return sb.ToString();
         }
     }
 }
