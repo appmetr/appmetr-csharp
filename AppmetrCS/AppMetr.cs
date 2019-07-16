@@ -56,8 +56,8 @@ namespace AppmetrCS
             {
                 {"token", _token.ToLower()},
                 {"mobUuid", Utils.GetHash(mobUuid)},
-                {"platform", Utils.GetHash(platform)},
-                {"mobDeviceType", Utils.GetHash(mobDeviceType)}
+                {"platform", platform},
+                {"mobDeviceType", mobDeviceType}
             });
         }
 

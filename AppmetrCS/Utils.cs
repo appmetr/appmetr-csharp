@@ -69,7 +69,7 @@ namespace AppmetrCS
 
             foreach (var param in @params)
             {
-                if (param.Value != null)
+                if (!String.IsNullOrEmpty(param.Value))
                 {
                     if (queryBuilder.Length > 0)
                     {
