@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Actions\AppMetrAction.cs" />
+    <Compile Include="Actions\AttachEntityAttributes.cs" />
     <Compile Include="Actions\AttachProperties.cs" />
     <Compile Include="Actions\TrackEvent.cs" />
     <Compile Include="Actions\TrackIdentify.cs" />
