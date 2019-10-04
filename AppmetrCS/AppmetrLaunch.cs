@@ -58,15 +58,6 @@ namespace AppmetrCS
                     {"double", 2.99}
                 }
             };
-            var trackLevel = new TrackLevel(5)
-            {
-                Properties = new Dictionary<String, Object>
-                {
-                    {"string", "my level"},
-                    {"int", 33},
-                    {"double", 3.99}
-                }
-            };
             var trackSession = new TrackSession(4);
             trackSession.Properties.Add("string", "my session");
             trackSession.Properties.Add("int", 44);
@@ -108,7 +99,6 @@ namespace AppmetrCS
             var actions = new List<AppMetrAction>();
             actions.Add(trackEvent);
             actions.Add(attachProperties);
-            actions.Add(trackLevel);
             actions.Add(trackSession);
             actions.Add(trackPayment);
             actions.Add(trackIdentify);
