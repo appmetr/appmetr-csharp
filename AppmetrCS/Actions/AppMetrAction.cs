@@ -28,6 +28,9 @@ namespace AppmetrCS.Actions
         [DataMember(Name = "userId")]
         private String _userId;
 
+        [DataMember(Name = "serverUserId")]
+        private String _serverUserId;
+
         protected AppMetrAction()
         {
         }
@@ -60,6 +63,12 @@ namespace AppmetrCS.Actions
             get { return _userId; }
             set { _userId = value; }
         }
+        
+        internal String ServerUserId
+        {
+            get { return _serverUserId; }
+            set { _serverUserId = value; }
+        }
 
         //http://codeblog.jonskeet.uk/2011/04/05/of-memory-and-strings/
         public virtual Int32 CalcApproximateSize()
@@ -69,6 +78,7 @@ namespace AppmetrCS.Actions
             size += GetStringLength(_action);
             size += GetStringLength(Convert.ToString(_timestamp));
             size += GetStringLength(_userId);
+            size += GetStringLength(_serverUserId);
 
             foreach (var pair in _properties) {
                 size += GetStringLength(pair.Key);
@@ -85,7 +95,7 @@ namespace AppmetrCS.Actions
         
         public override String ToString()
         {
-            return $"{GetType().Name}{{action={Action}, timestamp={_timestamp}, userTime={Timestamp}, userId={UserId}, " +
+            return $"{GetType().Name}{{action={Action}, timestamp={_timestamp}, userTime={Timestamp}, userId={UserId}, serverUserId={ServerUserId}, " +
                    $"properties={{{String.Join(",", Properties.Select(kv => kv.Key + "=" + kv.Value).ToArray())}}}";
         }
     }

@@ -38,7 +38,10 @@ namespace AppmetrCS
         private const Int32 FlushPeriod = MillisPerMinute/2;
         private const Int32 UploadPeriod = MillisPerMinute/2;
 
-        public AppMetr(String url, String token, String mobUuid, String platform, String mobDeviceType = "win", IBatchPersister batchPersister = null, HttpRequestService httpRequestService = null)
+        public string UserId { get; set; }
+        
+
+        public AppMetr(String url, String token, String mobUuid, String platform, String userId, String mobDeviceType = "win", IBatchPersister batchPersister = null, HttpRequestService httpRequestService = null)
         {
             Log.InfoFormat("Start Appmetr for token={0}, url={1}", token, url);
 
@@ -46,6 +49,7 @@ namespace AppmetrCS
             _url = url;
             _mobUuid = mobUuid;
             _platform = platform;
+            UserId = userId;
             _mobDeviceType = mobDeviceType;
             _batchPersister = batchPersister;
             _httpRequestService = httpRequestService;
@@ -63,6 +67,7 @@ namespace AppmetrCS
 
         public void Track(AppMetrAction action)
         {
+            action.ServerUserId = UserId;
             try
             {
                 var currentEventSize = action.CalcApproximateSize();
