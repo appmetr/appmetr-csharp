@@ -55,7 +55,7 @@ namespace AppmetrCS.Actions
         public IDictionary<String, Object> Properties
         {
             get { return _properties; }
-            set { _properties = value; }
+            set { _properties = new Dictionary<string, object>(value); }
         }
 
         public String UserId
