@@ -14,7 +14,6 @@ namespace AppmetrCS.Persister
     [DataContract]
     [KnownType(typeof(AttachProperties))]
     [KnownType(typeof(TrackEvent))]
-    [KnownType(typeof(TrackLevel))]
     [KnownType(typeof(TrackPayment))]
     [KnownType(typeof(TrackSession))]
     [KnownType(typeof(TrackIdentify))]
